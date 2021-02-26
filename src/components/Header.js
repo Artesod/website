@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Typical from "react-typical";
 import Switch from "react-switch";
-import ic from "../scss/themes/logo.png"
+import ic from "../scss/themes/logo.png";
+import ic2 from "../scss/themes/logo2.png";
 
 class Header extends Component {
   titles = [];
@@ -51,10 +52,12 @@ class Header extends Component {
       <header id="home" style={{ height: window.innerHeight, display: 'block'}}>
         <div className="row aligner" style={
           {height: '100%'}}>
+          
           <div className="col-md-12">
-          <img className="webicon" src = {ic}/>
+          
+          {this.state.checked? <img className="webicon" src = {ic2}/> : <img className="webicon" src = {ic}/>}
           <div className="social-links">{networks}</div>
-            <div>
+            <div className = "mainbody">
               <h1 className="mb-10">
                 <Typical steps={[name]} wrapper="p" />
               </h1>
