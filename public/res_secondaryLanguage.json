@@ -1,0 +1,101 @@
+{
+  "basic_info": {
+    "description_header": "Hello",
+    "description": "Ako ay isang kamakailang nagtapos sa Computer Science sa Stony Brook University, at naghahanap para sa isang full-time na posisyon ng Developer ng Software. Habang may kaalaman ako sa iba't ibang mga wika, komportable ako sa Javascript, Java, at Python. Nasisiyahan akong kumain ng masarap na pagkain, nakikisama sa mga kaibigan, at nagtatayo ng mga computer kung kaya ko.",
+    "section_name": {
+      "about": "Tungkol sa Akin",
+      "projects": "Mga Proyekto",
+      "skills": "Kasanayan",
+      "experience": "Karanasan"
+    }
+  },
+  "projects": [
+    {
+      "title": "Among The Beat",
+      "startDate": "2020",
+      "description": "Isang website ng Spotify-Esque na mayroong pag-andar ng isang music player. Bilang karagdagan, nangongolekta ito ng data ng gumagamit at ginagamit upang ipakita ang tukoy na kalagayan ng gumagamit.",
+      "images": [
+        "images/portfolio/animal-shelter/p1.jpg",
+        "images/portfolio/animal-shelter/p2.jpg"
+      ],
+      "url": "https://among-the-beat-sbu.herokuapp.com",
+      "technologies": [
+        {
+          "class": "devicon-react-plain",
+          "name": "ReactJS"
+        },
+        {
+          "class": "devicon-nodejs-plain",
+          "name": "NodeJS"
+        },
+        {
+          "class": "devicon-mongodb-plain",
+          "name": "MongoDB"
+        }
+      ]
+    },
+    {
+      "title": "Personal Website",
+      "startDate": "2020",
+      "description": "Ang aking personal na website na kasalukuyan mong nakikita dito.",
+      "images": [
+        "images/portfolio/photography/p1.jpg",
+        "images/portfolio/photography/p2.jpg"
+      ],
+      "url": "https://joshuadcanta.com/",
+      "technologies": [
+        {
+          "class": "devicon-react-original",
+          "name": "ReactJS"
+        },
+        {
+          "class": "devicon-javascript-plain",
+          "name": "JavaScript"
+        }
+      ]
+    },
+    {
+      "title": "Blue Knight Adventures",
+      "startDate": "2020",
+      "description": "Isang sample na laro na ginawa ko sa aking mga mag-aaral noong nagtatrabaho ako sa NASA. Gumamit ako ng Scratch upang makatulong na turuan sila ng mga batayan ng pag-coding.",
+      "images": [
+        "images/portfolio/adventure/p1.jpg",
+        "images/portfolio/adventure/p2.jpg"
+      ],
+      "url": "https://scratch.mit.edu/projects/412788995/",
+      "technologies": [
+        {
+          "class": "devicon-tomcat-line",
+          "name": "Scratch"
+        }
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "company": "NASA",
+      "title": "Tagapagturo ng Programming",
+      "years": "June 2020 - August 2020",
+      "mainTech": [
+        ""
+      ],
+      "technologies": [
+        "Python",
+        "Scratch"
+      ]
+    },
+    {
+      "company": "Stony Brook University",
+      "title": "Katuwang Sa Pagtuturo",
+      "years": "January 2019 - December 2019",
+      "mainTech": [
+        ""
+      ],
+      "technologies": [
+        "Java",
+        "Algorithms",
+        "Object Oriented Programming"
+      ]
+    }
+  ]
+}
