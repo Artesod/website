@@ -7,11 +7,12 @@ import About from "./components/About";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
 import Skills from "./components/Skills";
+import { Parallax } from 'react-scroll-parallax';
 
 const App = () => {
   const [resume, setResume] = useState({})
   const [info, setInfo] = useState({})
-  const [lightMode, setLightMode] = useState(true)
+  const [lightMode, setLightMode] = useState(false)
   
   useEffect(() => {
 
@@ -60,14 +61,16 @@ const App = () => {
           resumeBasicInfo={resume.basic_info}
         />
         <Skills
-          sharedSkills={info.skills ? info.skills : []}
-          resumeBasicInfo={resume.basic_info}
+          sharedBasicInfo={ info ? info.basic_info : {}}
+          skills={ info ? info.skills : {}}
+          lightMode = {lightMode}
         />
         <Experience
           resumeExperience={resume.experience ? resume.experience : []}
           resumeBasicInfo={resume.basic_info}
+          lightMode = {lightMode}
         />
-        <Footer sharedBasicInfo={info ? info.basic_info : {}} />
+        <Footer sharedBasicInfo={info ? info.basic_info : {}} lightMode = {lightMode}/>
       </div>
     );
 };

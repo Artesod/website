@@ -1,44 +1,57 @@
-import React, { Component } from "react";
+import React, {useEffect} from "react";
+import Style from "../scss/about-module.scss"
+import Terminal from "./Terminal";
 
-class Skills extends Component {
-  render() {
-    if (this.props.sharedSkills && this.props.resumeBasicInfo) {
-      var sectionName = this.props.resumeBasicInfo.section_name.skills;
-      var skills = this.props.sharedSkills.icons.map(function (skills, i) {
-        return (
-          <li className="list-inline-item mx-3" key={i}>
-            <span>
-              <div className="text-center skills-tile">
-                <i className={skills.class} style={{ fontSize: "220%" }}>
-                  <p
-                    className="text-center"
-                    style={{ fontSize: "30%", marginTop: "4px" }}
-                  >
-                    {skills.name}
-                  </p>
-                </i>
-              </div>
-            </span>
-          </li>
-        );
-      });
-    }
+export default function Skills(props) {
+  const {
+    skills,
+    sharedBasicInfo
+  } = props
+
+  let colors = ['rgb(0,255,164)', 'rgb(166,104,255)'];
+
+  const skillsSection = (skill) => {
+    const keyName = Object.keys(skill)[0];
+    const values = skill[keyName];
 
     return (
-      <section id="skills">
-        <div className="col-md-12">
-          <div className="col-md-12">
-            <h1 className="section-title">
-              <span className="text-white">{sectionName}</span>
-            </h1>
-          </div>
-          <div className="col-md-12 text-center">
-            <ul className="list-inline mx-auto skill-icon">{skills}</ul>
-          </div>
-        </div>
-      </section>
+      <div key={keyName}>
+        <p style={{ color: colors[0] }}> {keyName}</p>
+        <ul className="skills" style={{color: 'white'}}>
+          {values.map((skill) => (
+            <li key={skill}>{skill}</li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
+  function skillsText() {
+    return (
+      <>
+        <p  style={{color: 'white'}}>
+          <span style={{ color: colors[0] }}>
+            {sharedBasicInfo ? sharedBasicInfo.firstName.toLowerCase() : ""}
+            {sharedBasicInfo ? sharedBasicInfo.lastName.toLowerCase() : ""} $
+          </span>{' '}
+          cd skills
+        </p>
+        <p style={{color: 'white'}}>
+          <span style={{ color: colors[0] }}>
+            skills <span className={Style.green}>(main)</span> $
+          </span>{' '}
+          ls
+        </p>
+        {skills !== undefined ? Object.keys(skills).map((key) => {
+          return skillsSection({ [key]: skills[key] });
+        }) : <></>}
+      </>
     );
   }
-}
 
-export default Skills;
+  return (
+    <section id="skills">
+      <Terminal text={skillsText()} {...props}/>
+    </section>
+  );
+};

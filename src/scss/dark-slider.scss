@@ -475,3 +475,15 @@ $content-background-color: #8C8C8C;
     transform: translate3d(100%, 0, 0);
   }
 }
+
+.vertical-timeline-element-content{
+  background: #656565; 
+  color: white;
+  box-shadow: 0 3px 0 #8f8f8f;
+}
+
+
+.vertical-timeline-last .vertical-timeline-element-content{
+  background: transparent;
+  box-shadow: none;
+}

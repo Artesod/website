@@ -11,6 +11,50 @@
     },
     "projects": [
       {
+        "title": "Percipia Homepage",
+        "startDate": "2023",
+        "description": "I worked with my team in revamping the existing homepage, as well as other pages within the website",
+        "images": [
+          "images/portfolio/percipia_website/percipia_welcome.png",
+          "images/portfolio/percipia_website/percipia_news.png"
+        ],
+        "url": "https://percipia.com/",
+        "technologies": [
+          {
+            "class": "devicon-html5-plain",
+            "name": "HTML5"
+          },
+          {
+            "class": "devicon-css3-plain",
+            "name": "CSS/SCSS"
+          },
+          {
+            "class": "devicon-javascript-plain",
+            "name": "JavaScript"
+          }
+        ]
+      },
+      {
+      "title": "Personal Website",
+      "startDate": "2023",
+      "description": "My personal website that you currently see here.",
+      "images": [
+        "images/portfolio/photography/p1.jpg",
+        "images/portfolio/photography/p2.jpg"
+      ],
+      "url": "https://joshuadcanta.com/",
+      "technologies": [
+        {
+          "class": "devicon-react-original",
+          "name": "ReactJS"
+        },
+        {
+          "class": "devicon-javascript-plain",
+          "name": "JavaScript"
+        }
+      ]
+      },
+      {
         "title": "Among The Beat",
         "startDate": "2020",
         "description": "A Spotify-Esque website that has the functionality of a music player. In addition, it collects user data and uses to portray the user's specific mood.",
@@ -33,52 +77,28 @@
             "name": "MongoDB"
           }
         ]
-      },
-      {
-        "title": "Personal Website",
-        "startDate": "2020",
-        "description": "My personal website that you currently see here.",
-        "images": [
-          "images/portfolio/photography/p1.jpg",
-          "images/portfolio/photography/p2.jpg"
-        ],
-        "url": "https://joshuadcanta.com/",
-        "technologies": [
-          {
-            "class": "devicon-react-original",
-            "name": "ReactJS"
-          },
-          {
-            "class": "devicon-javascript-plain",
-            "name": "JavaScript"
-          }
-        ]
-      },
-      {
-        "title": "Blue Knight Adventures",
-        "startDate": "2020",
-        "description": "A sample game I made to my students when I was working in NASA. I used Scratch to help teach them the fundamentals of coding.",
-        "images": [
-          "images/portfolio/adventure/p1.jpg",
-          "images/portfolio/adventure/p2.jpg"
-        ],
-        "url": "https://scratch.mit.edu/projects/412788995/",
-        "technologies": [
-          {
-            "class": "devicon-tomcat-line",
-            "name": "Scratch"
-          }
-        ]
       }
     ],
     "experience": [
       {
+        "company": "Percipia",
+        "title": "Software Engineer",
+        "years": "November 2021 - Present",
+        "icon": "fab fa-react experience-icon",
+        "technologies": [
+          "ReactJS",
+          "JavaScript",
+          "HTML/HTML5",
+          "CSS/SCSS",
+          "Golang",
+          "SQL"
+        ]
+      },
+      {
         "company": "NASA",
         "title": "Programming Instructor",
         "years": "June 2020 - August 2020",
-        "mainTech": [
-          ""
-        ],
+        "icon": "fab fa-python experience-icon",
         "technologies": [
           "Python",
           "Scratch"
@@ -88,9 +108,7 @@
         "company": "Stony Brook University",
         "title": "Teaching Assistant",
         "years": "January 2019 - December 2019",
-        "mainTech": [
-          ""
-        ],
+        "icon": "fab fa-java experience-icon",
         "technologies": [
           "Java",
           "Algorithms",

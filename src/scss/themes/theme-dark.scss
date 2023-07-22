@@ -72,7 +72,13 @@ body[data-theme="dark"] {
   }
 
   #portfolio {
-     background: #8c8c8c;
+      background-image: url("night5.jpg");
+      background-size: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
      .section-title {
         color: white !important;
      }
@@ -116,6 +122,12 @@ body[data-theme="dark"] {
      }
   }
 
+  #skills{
+   background-image: url("night4.jpg");
+   background-size: cover;
+   background-repeat: no-repeat;
+}
+
   .modal-inside .modal-content {
      background: #616161;
      color: white;
@@ -124,4 +136,10 @@ body[data-theme="dark"] {
   .close-icon {
      color: white;
   }
+
+  #home, #about, #portfolio, #skills, #resume{
+
+	box-shadow:  0px -10px 20px #656565;
+   }
 }
+

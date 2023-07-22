@@ -4,6 +4,7 @@ import './index.scss';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ParallaxProvider } from 'react-scroll-parallax';
 
 /* GLOBAL VARIABLES */
 
@@ -14,6 +15,10 @@ window.$secondaryLanguageIconId = 'secondary-lang-icon';
 
 const root = document.getElementById('root');
 const appRoot = ReactDOM.createRoot(root);
-appRoot.render(<App />);
+appRoot.render(
+<ParallaxProvider>
+    <App />
+</ParallaxProvider>
+);
 
 serviceWorker.register();

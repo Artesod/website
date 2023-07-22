@@ -476,3 +476,14 @@ $content-background-color: #D7CAAA;
     transform: translate3d(100%, 0, 0);
   }
 }
+
+.vertical-timeline-element-content{
+  background: #D7CAAA; 
+  color: black;
+  box-shadow: 0 3px 0 #ffefc7;
+}
+
+.vertical-timeline-last .vertical-timeline-element-content{
+  background: transparent;
+  box-shadow: none;
+}

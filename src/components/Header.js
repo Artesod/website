@@ -7,7 +7,8 @@ import ic2 from "../scss/themes/logo2.png";
 const Header = (props) => {
   const{
     sharedData,
-    setLightMode
+    setLightMode,
+    lightMode
   } = props
   const [checked, setChecked] = useState(false);
   const [titles, setTitles] = useState([]);
@@ -15,7 +16,6 @@ const Header = (props) => {
 
   useEffect(() => {
     if (sharedData) {
-      console.log(sharedData)
       setTitles(sharedData.titles.map(x => [x.toUpperCase(), 1500]).flat());
 
       let fullName = sharedData.firstName + " " + sharedData.lastName
@@ -67,7 +67,7 @@ const Header = (props) => {
           <div className="social-links">{networks}</div>
             <div className = "mainbody">
               <h1 className="mb-10">
-                <Typical steps={["Joshua Canta"]} />
+                <Typical steps={["Joshua Canta"]}/>
               </h1>
 
               

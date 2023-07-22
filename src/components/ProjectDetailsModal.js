@@ -1,49 +1,49 @@
-import React, { Component } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
 import AwesomeSlider from "react-awesome-slider";
 import AwesomeSliderStyles from "../scss/light-slider.scss";
 import AwesomeSliderStyles2 from "../scss/dark-slider.scss";
 import "react-awesome-slider/dist/custom-animations/scale-out-animation.css";
-class ProjectDetailsModal extends Component {
-  render() {
-    if (this.props.data) {
-      const technologies = this.props.data.technologies;
-      const images = this.props.data.images;
-      var title = this.props.data.title;
-      var description = this.props.data.description;
-      var url = this.props.data.url;
-      if (this.props.data.technologies) {
-        var tech = technologies.map((icons, i) => {
-          return (
-            <li className="list-inline-item mx-3" key={i}>
-              <span>
-                <div className="text-center">
-                  <i className={icons.class} style={{ fontSize: "300%" }}>
-                    <p className="text-center" style={{ fontSize: "30%" }}>
-                      {icons.name}
-                    </p>
-                  </i>
-                </div>
-              </span>
-            </li>
-          );
-        });
-        if (this.props.data.images) {
-          var img = images.map((elem, i) => {
-            return <div key={i} data-src={elem} />;
-          });
-        }
+
+const ProjectDetailsModal = (props) => {
+  let technologies, images, title, description, url, tech, img;
+
+  if (props.data) {
+    technologies = props.data.technologies;
+    images = props.data.images;
+    title = props.data.title;
+    description = props.data.description;
+    url = props.data.url;
+
+    if (props.data.technologies) {
+      tech = technologies.map((icons, i) => (
+        <li className="list-inline-item mx-3" key={i}>
+          <span>
+            <div className="text-center">
+              <i className={icons.class} style={{ fontSize: "300%" }}>
+                <p className="text-center" style={{ fontSize: "30%" }}>
+                  {icons.name}
+                </p>
+              </i>
+            </div>
+          </span>
+        </li>
+      ));
+
+      if (props.data.images) {
+        img = images.map((elem, i) => <div key={i} data-src={elem} />);
       }
     }
+  }
     return (
       <Modal
-        {...this.props}
+        {...props}
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className="modal-inside"
       >
-        <span onClick={this.props.onHide} className="modal-close">
+        <span onClick={props.onHide} className="modal-close">
           <i className="fas fa-times fa-3x close-icon"></i>
         </span>
         <div className="col-md-12">
@@ -101,7 +101,6 @@ class ProjectDetailsModal extends Component {
         </div>
       </Modal>
     );
-  }
 }
 
 export default ProjectDetailsModal;

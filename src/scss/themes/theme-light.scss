@@ -71,9 +71,15 @@ body[data-theme="light"] {
    }
 
    #portfolio {
-      background: #D7CAAA;
+      background-image: url("sky3.jpg");
+      background-size: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       .section-title {
-         color: black !important;
+         color: white !important;
       }
       .foto div {
          background: #b1a68c;
@@ -85,7 +91,9 @@ body[data-theme="light"] {
 
    #resume {
       filter: brightness(100%);
-      background-image: url("sky3.jpg");
+      background-image: url("sky5.jpg");
+      background-size: cover;
+
       .section-title {
          color: white !important;
       }
@@ -113,6 +121,12 @@ body[data-theme="light"] {
       }
    }
 
+   #skills{
+      background-image: url("sky4.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+   }
+
    .modal-inside .modal-content {
       background: #D7CAAA;
       color: black;
@@ -121,5 +135,11 @@ body[data-theme="light"] {
    .close-icon {
       color: black;
    }
+
+   #home, #about, #portfolio, #skills, #resume{
+
+	box-shadow:  0px -10px 20px #D7CAAA;
+   }
     
 }
+

@@ -29,22 +29,30 @@ html {
 	width: 150px;
 }
 
+#home, #about, #portfolio, #skills{
+	position: sticky;
+    scroll-behavior: smooth;
+    top: 0;
+    align-self: flex-start;
+    overflow: hidden;
+
+	@media screen and (max-width: 1000px) {
+		position: relative;
+		
+	}
+}
+
 header {
-	position: relative;
-	height: 520px;
-	min-height: 450px;
+	height: 100vh;
 	width: 100%;
 	background-size: cover;
 	-webkit-background-size: cover;
 	text-align: center;
 	overflow: hidden;
-	background-color: #e9d5a1;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
-	background-size: cover;
-	padding-top: 150px;
-	padding-bottom: 0;
+	background-repeat: no-repeat;
 }
 
 .language-icon {
@@ -114,7 +122,14 @@ header h1 {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	position: relative;
+	min-height: 100vh;
+	background-size: contain;
+	background-repeat: no-repeat;
+
+	@media screen and (max-width: 1000px) {
+		flex-direction: column;
+		
+	}
 }
 
 .foto img {
@@ -215,7 +230,11 @@ header h1 {
 }
 
 #resume {
-	background: #efe1bd;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .experience-icon {
@@ -337,7 +356,6 @@ header h1 {
 }
 
 #portfolio {
-	background: #efe1bd;
 	padding-bottom: 5%;
 }
 
@@ -373,11 +391,15 @@ header h1 {
 }
 
 #skills {
-	background: #1F1F1F;
-	min-height: 200px;
+	min-height: 100vh;
 	width: 100%;
 	overflow: hidden;
-	padding-bottom: 10%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-top: 5%;
+	padding-bottom: 5%;
 }
 
 .section-title {
@@ -398,7 +420,6 @@ header h1 {
 }
 
 footer {
-	background: #1F1F1F;
 	min-height: 100px;
 	width: 100%;
 	overflow: hidden;
