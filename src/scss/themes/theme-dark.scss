@@ -1,6 +1,6 @@
 body[data-theme="dark"] {  
 
-   @import '../src/scss/dark-slider.scss';
+   @import '../dark-slider.scss';
 
    .slider-tab {
       background-color: #8c8c8c;
@@ -11,7 +11,6 @@ body[data-theme="dark"] {
   }
 
   .webicon{
-   position: absolute;
    width: 20%;
    height: auto;
    bottom: 30vh;

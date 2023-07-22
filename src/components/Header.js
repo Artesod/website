@@ -1,65 +1,73 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import Typical from "react-typical";
 import Switch from "react-switch";
 import ic from "../scss/themes/logo.png";
 import ic2 from "../scss/themes/logo2.png";
 
-class Header extends Component {
-  titles = [];
+const Header = (props) => {
+  const{
+    sharedData,
+    setLightMode
+  } = props
+  const [checked, setChecked] = useState(false);
+  const [titles, setTitles] = useState([]);
+  const [name, setName ] = useState([])
 
-  constructor() {
-    super();
-    this.state = { checked: false };
-    this.onThemeSwitchChange = this.onThemeSwitchChange.bind(this);
-  }
+  useEffect(() => {
+    if (sharedData) {
+      console.log(sharedData)
+      setTitles(sharedData.titles.map(x => [x.toUpperCase(), 1500]).flat());
 
-  onThemeSwitchChange(checked) {
-    this.setState({ checked });
-    this.setTheme();
-  }
+      let fullName = sharedData.firstName + " " + sharedData.lastName
+      setName(fullName.split('').map(x => [x, 1500]).flat());
+    }
+  }, [sharedData]);
 
-  setTheme() {
+  const onThemeSwitchChange = (checked) => {
+    setChecked(checked);
+    setTheme();
+  };
+
+  const setTheme = () => {
     var dataThemeAttribute = "data-theme";
     var body = document.body;
+    let mode = body.getAttribute(dataThemeAttribute)
     var newTheme =
-      body.getAttribute(dataThemeAttribute) === "dark" ? "light" : "dark";
+      mode === "dark" ? "light" : "dark";
     body.setAttribute(dataThemeAttribute, newTheme);
+    setLightMode(newTheme === "light" ? true : false)
+
+  };
+
+  const HeaderTitleTypeAnimation = React.memo(() => {
+    return <Typical className="title-styles" steps={titles} loop={999} />;
+  }, (props, prevProp) => true);
+
+  let networks;
+  if (sharedData) {
+    networks = sharedData.social.map(function (network) {
+      return (
+        <span key={network.name} className="m-4" id="tooltip">
+          <a href={network.url} target="_blank" rel="noopener noreferrer">
+            <i className={network.class} id="icons"></i>
+          </a>
+        </span>
+      );
+    });
   }
 
-  render() {
-    if (this.props.sharedData) {
-      var name = this.props.sharedData.name;
-      this.titles = this.props.sharedData.titles.map(x => [ x.toUpperCase(), 1500 ] ).flat();
-    }
-
-    const HeaderTitleTypeAnimation = React.memo( () => {
-      return <Typical className="title-styles" steps={this.titles} loop={Infinity} />
-    }, (props, prevProp) => true);
-
-    if (this.props.sharedData) {
-      var networks = this.props.sharedData.social.map(function (network) {
-        return (
-          <span key={network.name} className="m-4" id = "tooltip">
-            <a href={network.url} target="_blank" rel="noopener noreferrer">
-              <i className={network.class} id = "icons"></i>
-            </a>
-          </span>
-        );
-      });
-    }
-
     return (
-      <header id="home" style={{ height: window.innerHeight, display: 'block'}}>
+      <header id="home" style={{ height: window.innerHeight, display: 'flex', flexDirection: 'column'}}>
         <div className="row aligner" style={
           {height: '100%'}}>
           
           <div className="col-md-12">
           
-          {this.state.checked? <img className="webicon" src = {ic2}/> : <img className="webicon" src = {ic}/>}
+          {checked? <img className="webicon" src = {ic2}/> : <img className="webicon" src = {ic}/>}
           <div className="social-links">{networks}</div>
             <div className = "mainbody">
               <h1 className="mb-10">
-                <Typical steps={[name]} wrapper="p" />
+                <Typical steps={["Joshua Canta"]} />
               </h1>
 
               
@@ -70,8 +78,8 @@ class Header extends Component {
                 <HeaderTitleTypeAnimation />
               </div>
               <Switch
-                checked={this.state.checked}
-                onChange={this.onThemeSwitchChange}
+                checked={checked}
+                onChange={onThemeSwitchChange}
                 offColor="#baaa80"
                 onColor="#353535"
                 className="react-switch mx-auto"
@@ -114,7 +122,6 @@ class Header extends Component {
         </div>
       </header>
     );
-  }
 }
 
 export default Header;

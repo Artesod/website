@@ -1,7 +1,10 @@
 {
     "basic_info": {
-      "name": "Joshua Canta",
-      "titles": [ "Software Developer", "Computer Science Student", "Avid Computer Builder"],
+      "firstName": "Joshua",
+      "lastName" : "Canta",
+      "initials": "AL",
+      "gradient": "-webkit-linear-gradient(135deg, ${colors})", 
+      "titles": [ "I am a Software Engineer", "I am a Full Stack Developer", "I am an avid PC builder"],
       "social": [
         {
           "name": "GitHub",
