@@ -29,9 +29,9 @@
 @layer utilities {
   .section-snap {
     scroll-snap-align: start;
-    height: 100vh;
+    min-height: 100vh;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   .gradient-text {
