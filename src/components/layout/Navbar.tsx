@@ -31,25 +31,24 @@ export function Navbar() {
         scrolled ? 'bg-base/80 backdrop-blur-md border-b border-border' : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8 md:gap-10">
-          <button onClick={() => scrollTo('hero')} className="flex items-center flex-shrink-0">
-            <img src={logo} alt="JC" className="h-9 w-9 filter invert opacity-90" />
-          </button>
-
-          <ul className="hidden md:flex items-center gap-7">
-            {NAV_LINKS.map((link) => (
-              <li key={link.id}>
-                <button
-                  onClick={() => scrollTo(link.id)}
-                  className="text-text-secondary hover:text-emerald-accent text-base font-medium transition-colors duration-200"
-                >
-                  {link.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-center">
+        <ul className="hidden md:flex items-center gap-7">
+          <li>
+            <button onClick={() => scrollTo('hero')} className="flex items-center flex-shrink-0 mr-2">
+              <img src={logo} alt="JC" className="h-8 w-8 filter invert opacity-90" />
+            </button>
+          </li>
+          {NAV_LINKS.map((link) => (
+            <li key={link.id}>
+              <button
+                onClick={() => scrollTo(link.id)}
+                className="text-text-secondary hover:text-emerald-accent text-base font-medium transition-colors duration-200"
+              >
+                {link.label}
+              </button>
+            </li>
+          ))}
+        </ul>
 
         <button
           className="md:hidden flex flex-col gap-1.5 p-2"

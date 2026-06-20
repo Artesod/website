@@ -6,11 +6,11 @@ export default {
     extend: {
       colors: {
         base: '#020c1b',
-        surface: '#040f1f',
-        border: '#0f2d4a',
+        surface: '#071828',
+        border: '#1a3f5c',
         blue: {
-          accent: '#2563eb',
-          light: '#60a5fa',
+          accent: '#3b82f6',
+          light: '#93c5fd',
         },
         emerald: {
           accent: '#10b981',
@@ -18,8 +18,8 @@ export default {
         },
         text: {
           primary: '#f1f5f9',
-          secondary: '#64748b',
-          muted: '#475569',
+          secondary: '#d0e4f7',
+          muted: '#b0c8e0',
         },
       },
       fontFamily: {
@@ -27,8 +27,8 @@ export default {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       backgroundImage: {
-        'gradient-accent': 'linear-gradient(90deg, #2563eb, #10b981)',
-        'gradient-accent-diag': 'linear-gradient(135deg, #2563eb, #10b981)',
+        'gradient-accent': 'linear-gradient(90deg, #3b82f6, #10b981)',
+        'gradient-accent-diag': 'linear-gradient(135deg, #3b82f6, #10b981)',
       },
     },
   },

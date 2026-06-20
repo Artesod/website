@@ -7,7 +7,7 @@ import { Button } from '../ui/Button'
 
 const EMAILJS_SERVICE = 'service_o2audz8'
 const EMAILJS_TEMPLATE = 'template_emt9njd'
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY'
+const EMAILJS_PUBLIC_KEY = 'xPkJW_xWB9tJ-s1zB'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 

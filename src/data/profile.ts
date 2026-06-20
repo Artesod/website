@@ -8,7 +8,7 @@ export const profile = {
     'Go Developer',
     'Website Builder',
     'Full Stack Engineer',
-    "Computer Builder"
+    "Keyboard Enthusiast"
   ],
   available: true,
   availabilityText: 'Open to new opportunities',
@@ -35,10 +35,10 @@ export const profile = {
     location: 'Stony Brook, NY',
   },
   interests: [
-    { label: 'AI & LLM Tooling', icon: 'mdi:brain' },
-    { label: 'System Design', icon: 'mdi:sitemap-outline' },
-    { label: 'Game Development', icon: 'mdi:gamepad-variant-outline' },
-    { label: 'Open Source', icon: 'mdi:source-branch' },
+    { label: 'Gaming', icon: 'mdi:controller' },
+    { label: 'PC Building', icon: 'mdi:desktop-tower' },
+    { label: 'Basketball', icon: 'mdi:basketball' },
+    { label: 'Trying New Food Spots', icon: 'mdi:silverware-fork-knife' },
   ],
   currentlyBuilding: 'Rebel Budget — an AI-powered personal finance app with conversational analytics.',
 } as const

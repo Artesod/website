@@ -16,7 +16,7 @@ export const projects: Project[] = [
   {
     id: 'rebel-budget',
     title: 'Rebel Budget',
-    year: 2025,
+    year: 2026,
     description: 'AI-powered financial management app with intelligent expense tracking and analytics.',
     longDescription:
       'Full-stack financial management application featuring an AI conversational assistant powered by OpenAI, interactive analytics dashboards, and secure multi-user authentication.',
@@ -33,7 +33,7 @@ export const projects: Project[] = [
   {
     id: 'percipia-website',
     title: 'Percipia Website',
-    year: 2025,
+    year: 2026,
     description: 'Corporate website with comprehensive admin system for content and business management.',
     longDescription:
       'Public-facing corporate site with a role-based admin panel, real-time monitoring dashboard, secure session management with audit logging, and full SEO optimization.',
@@ -50,7 +50,7 @@ export const projects: Project[] = [
   {
     id: 'personal-website',
     title: 'Personal Website',
-    year: 2025,
+    year: 2026,
     description: 'This portfolio — a cinematic snap-scroll experience built from scratch.',
     longDescription:
       'Fully redesigned personal portfolio with a dark blue/emerald visual identity, cinematic scroll-snap navigation, and Framer Motion entrance animations throughout.',

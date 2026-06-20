@@ -20,34 +20,41 @@ export function Hero() {
       <div className="absolute bottom-0 left-0 w-80 h-80 bg-emerald-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 flex flex-col items-center max-w-4xl">
-        <motion.div className="relative mb-8" {...fadeUp(0.1)}>
+        <motion.div
+          className="relative mb-10"
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.75, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+        >
+          {/* Ambient glow */}
           <div className="absolute inset-0 scale-150 bg-blue-accent/20 rounded-full blur-3xl pointer-events-none" />
+
+          {/* Sonar ring 1 */}
+          <motion.div
+            className="absolute inset-0 rounded-full border border-blue-accent/50 pointer-events-none"
+            initial={{ opacity: 0.8, scale: 1 }}
+            animate={{ opacity: 0, scale: 2.4 }}
+            transition={{ duration: 1.4, delay: 0.55, ease: 'easeOut' }}
+          />
+
+          {/* Sonar ring 2 */}
+          <motion.div
+            className="absolute inset-0 rounded-full border border-blue-accent/25 pointer-events-none"
+            initial={{ opacity: 0.5, scale: 1 }}
+            animate={{ opacity: 0, scale: 3.0 }}
+            transition={{ duration: 1.8, delay: 0.75, ease: 'easeOut' }}
+          />
+
           <img
             src={logo}
             alt="JC"
-            className="relative w-28 h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 filter invert"
+            className="relative w-48 h-48 md:w-64 md:h-64 lg:w-80 lg:h-80 filter invert"
           />
         </motion.div>
 
-        {profile.available && (
-          <motion.div className="mb-6" {...fadeUp(0.15)}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-accent/10 border border-emerald-accent/30 rounded-full text-emerald-accent text-sm font-medium">
-              <span className="w-2 h-2 rounded-full bg-emerald-accent animate-pulse" />
-              {profile.availabilityText}
-            </span>
-          </motion.div>
-        )}
-
-        <motion.p
-          className="font-mono text-emerald-accent text-sm md:text-base tracking-widest uppercase mb-4"
-          {...fadeUp(0.25)}
-        >
-          &gt;_ Full Stack Software Engineer
-        </motion.p>
-
         <motion.h1
           className="text-6xl md:text-8xl lg:text-9xl font-black text-text-primary leading-none mb-4"
-          {...fadeUp(0.4)}
+          {...fadeUp(0.25)}
         >
           {profile.firstName}{' '}
           <span className="gradient-text">{profile.lastName}</span>
@@ -55,13 +62,13 @@ export function Hero() {
 
         <motion.p
           className="font-mono text-text-secondary text-lg md:text-xl h-8 mb-8"
-          {...fadeUp(0.55)}
+          {...fadeUp(0.4)}
         >
           {typed}
           <span className="animate-pulse text-emerald-accent">|</span>
         </motion.p>
 
-        <motion.div className="flex flex-wrap items-center gap-5 mb-8" {...fadeUp(0.7)}>
+        <motion.div className="flex flex-wrap items-center gap-5 mb-8" {...fadeUp(0.55)}>
           <Button
             variant="primary"
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
@@ -73,7 +80,7 @@ export function Hero() {
           </Button>
         </motion.div>
 
-        <motion.div className="flex items-center gap-6 mb-10" {...fadeUp(0.85)}>
+        <motion.div className="flex items-center gap-6 mb-10" {...fadeUp(0.7)}>
           <a
             href={profile.social.github}
             target="_blank"
@@ -100,7 +107,7 @@ export function Hero() {
 
         <motion.div
           className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-text-muted text-sm font-mono"
-          {...fadeUp(0.95)}
+          {...fadeUp(0.8)}
         >
           <span className="flex items-center gap-1.5">
             <Icon icon="mdi:map-marker-outline" className="w-4 h-4 text-emerald-accent" />
