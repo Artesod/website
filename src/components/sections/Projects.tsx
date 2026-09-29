@@ -1,7 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { Icon } from '@iconify/react'
-import { projects } from '../../data/projects'
+import { projects, type Project } from '../../data/projects'
 import { Badge } from '../ui/Badge'
 
 export function Projects() {
@@ -105,7 +105,9 @@ export function Projects() {
 
           {/* Remaining projects — 2-column grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {rest.map((project, idx) => (
+            {rest.map((project, idx) => project.theme === 'perfect-season' ? (
+              <PerfectSeasonCard key={project.id} project={project} inView={inView} delay={0.35 + idx * 0.1} />
+            ) : (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -157,5 +159,76 @@ export function Projects() {
         </div>
       </div>
     </section>
+  )
+}
+
+// Mirrors the neon pink/cyan look of the Perfect Season app itself
+function PerfectSeasonCard({ project, inView, delay }: { project: Project; inView: boolean; delay: number }) {
+  const [first, ...restWords] = project.title.split(' ')
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay }}
+      className="relative overflow-hidden rounded-2xl p-6 flex flex-col gap-4 border border-[#2a2742] bg-[#100f1a] text-[#c9c6da] hover:border-[#ff2e97] hover:shadow-[0_0_24px_#ff2e974d] transition-[border-color,box-shadow] duration-300"
+      style={{
+        background:
+          'radial-gradient(500px 220px at 0% -10%, #ff2e9722, transparent), radial-gradient(500px 220px at 100% -10%, #29d8f21c, transparent), #100f1a',
+        fontFamily: 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
+      }}
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3
+            className="uppercase tracking-[3px] text-xl text-[#f4f2fc]"
+            style={{ fontFamily: '"Segoe UI Semibold", "Arial Narrow", system-ui, sans-serif' }}
+          >
+            {first}{' '}
+            <span className="text-[#ff2e97] [text-shadow:0_0_16px_#ff2e9773]">{restWords.join(' ')}</span>
+          </h3>
+          <span className="text-[#29d8f2] text-xs uppercase tracking-[2px] font-semibold [text-shadow:0_0_10px_#29d8f273]">
+            Go 82–0. Or go home.
+          </span>
+        </div>
+        <div className="flex gap-3 flex-shrink-0 items-center">
+          {project.githubUrl && (
+            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
+              className="text-[#85819e] hover:text-[#f4f2fc] transition-colors duration-200">
+              <Icon icon="mdi:github" className="w-5 h-5" />
+            </a>
+          )}
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+              className="text-[#85819e] hover:text-[#ff2e97] transition-colors duration-200">
+              <Icon icon="mdi:open-in-new" className="w-5 h-5" />
+            </a>
+          )}
+        </div>
+      </div>
+
+      <p className="text-sm leading-relaxed">{project.longDescription}</p>
+
+      <ul className="flex flex-col gap-1.5">
+        {project.highlights.slice(0, 3).map((h) => (
+          <li key={h} className="flex gap-2.5 text-[#85819e] text-xs leading-relaxed">
+            <span className="text-[#ff2e97] flex-shrink-0">▸</span>
+            {h}
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex flex-wrap gap-2 mt-auto pt-3 border-t border-[#2a2742]">
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            className="px-2.5 py-1 rounded-xl bg-[#29d8f21f] text-[#29d8f2] text-xs font-semibold whitespace-nowrap"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+    </motion.div>
   )
 }

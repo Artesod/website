@@ -10,6 +10,7 @@ export interface Project {
   githubUrl?: string
   featured: boolean
   image?: string
+  theme?: 'perfect-season'
 }
 
 export const projects: Project[] = [
@@ -29,6 +30,24 @@ export const projects: Project[] = [
     ],
     tech: ['React', 'TypeScript', 'FastAPI', 'PostgreSQL', 'OpenAI API', 'Chart.js', 'Docker', 'JWT'],
     featured: true,
+  },
+  {
+    id: 'perfect-season',
+    title: 'Perfect Season',
+    year: 2026,
+    description: 'Roguelike NBA team-builder: draft a roster, chase 82–0 and a championship.',
+    longDescription:
+      'Browser-based roguelike where you draft an NBA roster, survive random season events, and chase a perfect 82–0 record and a championship.',
+    highlights: [
+      'Roguelike draft loop with player traits, badges, and random season events',
+      'Seeded runs so friends can replay and challenge the same season',
+      'Global leaderboard and shareable results backed by Supabase',
+    ],
+    tech: ['React', 'TypeScript', 'Vite', 'Zustand', 'Supabase', 'PostgreSQL'],
+    liveUrl: 'https://artesod.github.io/perfect-season/',
+    githubUrl: 'https://github.com/Artesod/perfect-season',
+    featured: false,
+    theme: 'perfect-season',
   },
   {
     id: 'percipia-website',
