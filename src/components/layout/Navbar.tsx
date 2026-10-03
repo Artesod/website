@@ -1,79 +1,100 @@
-import { useState, useEffect } from 'react'
-import logo from '../../assets/logo.png'
+import { useEffect, useState } from 'react'
+import { Icon } from '@iconify/react'
+import { motion, useScroll, useSpring } from 'framer-motion'
+import { profile } from '../../data/profile'
 
 const NAV_LINKS = [
-  { label: 'About', id: 'about' },
-  { label: 'Skills', id: 'skills' },
   { label: 'Projects', id: 'projects' },
-  { label: 'Experience', id: 'experience' },
+  { label: 'Work', id: 'work' },
+  { label: 'Kit', id: 'kit' },
+  { label: 'Builds', id: 'builds' },
+  { label: 'About', id: 'about' },
   { label: 'Contact', id: 'contact' },
 ]
-
-function scrollTo(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-}
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 40 })
 
   useEffect(() => {
-    const container = document.getElementById('scroll-container')
-    if (!container) return
-    const onScroll = () => setScrolled(container.scrollTop > 60)
-    container.addEventListener('scroll', onScroll, { passive: true })
-    return () => container.removeEventListener('scroll', onScroll)
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-base/80 backdrop-blur-md border-b border-border' : 'bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow] duration-300 ${
+        scrolled || menuOpen ? 'bg-ground/90 backdrop-blur-sm shadow-[0_6px_20px_-12px_rgb(0_0_0/0.9)]' : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-center">
-        <ul className="hidden md:flex items-center gap-7">
-          <li>
-            <button onClick={() => scrollTo('hero')} className="flex items-center flex-shrink-0 mr-2">
-              <img src={logo} alt="JC" className="h-8 w-8 filter invert opacity-90" />
-            </button>
-          </li>
+      <nav className="mx-auto flex h-[4.5rem] max-w-page items-center justify-between px-4 sm:px-8" aria-label="Main">
+        <a href="#top" className="group flex items-center gap-3" aria-label="Joshua Canta, back to top">
+          <span className="cap cap-rose h-12 w-12 items-center justify-center p-0 pb-1.5">
+            <span className="logo-mark w-7" aria-hidden />
+          </span>
+          <span className="legend hidden text-sm text-blush sm:inline">Joshua Canta</span>
+        </a>
+
+        <ul className="hidden items-center gap-2 md:flex">
           {NAV_LINKS.map((link) => (
             <li key={link.id}>
-              <button
-                onClick={() => scrollTo(link.id)}
-                className="text-text-secondary hover:text-emerald-accent text-base font-medium transition-colors duration-200"
-              >
-                {link.label}
-              </button>
+              <a href={`#${link.id}`} className="cap cap-alpha legend text-sm">
+                <span>{link.label}</span>
+              </a>
             </li>
           ))}
+          <li className="ml-2">
+            <a href={profile.resumeUrl} target="_blank" rel="noopener noreferrer" className="cap cap-rose legend text-sm">
+              <span className="inline-flex items-center gap-1">
+                Resume <Icon icon="mdi:arrow-top-right" className="h-4 w-4" aria-hidden />
+              </span>
+            </a>
+          </li>
         </ul>
 
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          className="cap cap-alpha legend text-sm md:hidden"
           onClick={() => setMenuOpen((o) => !o)}
-          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
         >
-          <span className={`block w-5 h-0.5 bg-text-primary transition-transform duration-200 origin-center ${menuOpen ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-5 h-0.5 bg-text-primary transition-opacity duration-200 ${menuOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-5 h-0.5 bg-text-primary transition-transform duration-200 origin-center ${menuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+          <span className="inline-flex items-center gap-1.5">
+            <Icon icon={menuOpen ? 'mdi:close' : 'mdi:menu'} className="h-4 w-4" aria-hidden />
+            Menu
+          </span>
         </button>
       </nav>
 
+      <motion.div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-[2px] origin-left bg-rose"
+        style={{ scaleX: progress, opacity: scrolled ? 1 : 0 }}
+      />
+
       {menuOpen && (
-        <div className="md:hidden bg-base/95 backdrop-blur-md border-b border-border">
-          <ul className="px-6 py-4 flex flex-col gap-4">
+        <div id="mobile-menu" className="md:hidden border-t border-line px-4 pb-5 pt-4">
+          <ul className="grid grid-cols-3 gap-2">
             {NAV_LINKS.map((link) => (
               <li key={link.id}>
-                <button
-                  onClick={() => { scrollTo(link.id); setMenuOpen(false) }}
-                  className="text-text-secondary hover:text-text-primary text-sm font-medium w-full text-left"
-                >
-                  {link.label}
-                </button>
+                <a href={`#${link.id}`} onClick={() => setMenuOpen(false)} className="cap cap-alpha legend w-full text-sm h-12">
+                  <span>{link.label}</span>
+                </a>
               </li>
             ))}
+            <li>
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cap cap-rose legend w-full text-sm h-12"
+              >
+                <span>Resume</span>
+              </a>
+            </li>
           </ul>
         </div>
       )}

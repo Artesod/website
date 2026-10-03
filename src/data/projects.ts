@@ -10,12 +10,18 @@ export interface Project {
   githubUrl?: string
   featured: boolean
   image?: string
+  /** Real screenshots, first is the hero shot. */
+  shots?: { src: string; alt: string }[]
   theme?: 'perfect-season'
 }
 
 export const projects: Project[] = [
   {
     id: 'rebel-budget',
+    shots: [
+      { src: '/images/portfolio/rebel-budget/dashboard.webp', alt: 'Rebel Budget dashboard: the pet on its LCD, weekly budget left, level and recent log (sample data)' },
+      { src: '/images/portfolio/rebel-budget/analytics.webp', alt: 'Rebel Budget weekly spending report and category breakdown (sample data)' },
+    ],
     title: 'Rebel Budget',
     year: 2026,
     description: 'AI-powered financial management app with intelligent expense tracking and analytics.',
@@ -33,6 +39,10 @@ export const projects: Project[] = [
   },
   {
     id: 'perfect-season',
+    shots: [
+      { src: '/images/portfolio/perfect-season/draft.webp', alt: 'Perfect Season draft screen: round 1 player picks, cap sheet, and roster' },
+      { src: '/images/portfolio/perfect-season/home.webp', alt: 'Perfect Season home screen with new-run settings and career badges' },
+    ],
     title: 'Perfect Season',
     year: 2026,
     description: 'Roguelike NBA team-builder: draft a roster, chase 82–0 and a championship.',
@@ -51,6 +61,10 @@ export const projects: Project[] = [
   },
   {
     id: 'percipia-website',
+    shots: [
+      { src: '/images/portfolio/percipia_website/welcome.webp', alt: 'Percipia homepage hero: We are Percipia' },
+      { src: '/images/portfolio/percipia_website/news.webp', alt: 'Percipia news page' },
+    ],
     title: 'Percipia Website',
     year: 2026,
     description: 'Corporate website with comprehensive admin system for content and business management.',
@@ -64,24 +78,6 @@ export const projects: Project[] = [
     ],
     tech: ['HTML', 'CSS', 'JavaScript', 'Go'],
     liveUrl: 'https://percipia.com/',
-    featured: false,
-  },
-  {
-    id: 'personal-website',
-    title: 'Personal Website',
-    year: 2026,
-    description: 'This portfolio — a cinematic snap-scroll experience built from scratch.',
-    longDescription:
-      'Fully redesigned personal portfolio with a dark blue/emerald visual identity, cinematic scroll-snap navigation, and Framer Motion entrance animations throughout.',
-    highlights: [
-      'Scroll-snap layout with 6 full-viewport sections for a guided experience',
-      'Framer Motion animations triggered on viewport entry',
-      'Custom useTypewriter hook for the animated hero subtitle',
-      'EmailJS-powered contact form with status feedback',
-    ],
-    tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Framer Motion'],
-    liveUrl: 'https://joshuadcanta.com/',
-    githubUrl: 'https://github.com/Artesod',
     featured: false,
   },
 ]

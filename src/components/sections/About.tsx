@@ -1,87 +1,79 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { profile } from '../../data/profile'
+import { KeyTray, Reveal, Title, dropKey } from '../ui/motion'
+
+// Novelty caps on the desk, deliberately not uniform.
+const ARTISANS = [
+  { tone: 'cap-rose', size: 'h-28' },
+  { tone: 'cap-alpha', size: 'h-24' },
+  { tone: 'cap-cream', size: 'h-24' },
+  { tone: 'cap-rose', size: 'h-28' },
+]
 
 export function About() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-20%' })
-
-  const anim = (delay = 0) => ({
-    initial: { opacity: 0, y: 40 },
-    animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 },
-    transition: { duration: 0.6, delay, ease: 'easeOut' },
-  })
-
   return (
-    <section id="about" className="section-snap flex items-center relative px-6 overflow-y-auto">
-      <div className="absolute top-1/4 left-0 w-72 h-72 bg-blue-accent/8 rounded-full blur-[100px] pointer-events-none" />
-
-      <div ref={ref} className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-start py-20">
-        {/* Left column */}
-        <div>
-          <motion.p className="font-mono text-emerald-accent text-sm tracking-widest uppercase mb-4" {...anim(0)}>
-            &gt;_ ABOUT
-          </motion.p>
-          <motion.h2 className="text-5xl md:text-6xl font-black text-text-primary mb-6" {...anim(0.1)}>
-            Who I Am
-          </motion.h2>
-          <motion.p className="text-text-secondary leading-relaxed mb-4 text-lg" {...anim(0.2)}>
+    <section id="about" className="bg-ground text-blush">
+      <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-end lg:gap-16">
+          <Title className="text-[clamp(2.75rem,7vw,5.5rem)]">About</Title>
+          <Reveal as="p" className="max-w-[62ch] text-xl leading-relaxed" delay={0.1}>
             {profile.bio}
-          </motion.p>
-          <motion.p className="text-text-secondary leading-relaxed mb-8 text-base" {...anim(0.25)}>
-            {profile.bioExtended}
-          </motion.p>
-
-          <motion.div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8" {...anim(0.3)}>
-            {profile.stats.map((stat) => (
-              <div key={stat.label} className="bg-surface border border-border rounded-2xl p-4 text-center">
-                <div className="text-3xl font-black gradient-text">{stat.value}</div>
-                <div className="text-text-muted text-xs mt-1 leading-snug">{stat.label}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div className="bg-surface border border-border rounded-2xl p-5" {...anim(0.35)}>
-            <p className="font-mono text-blue-light text-xs tracking-widest uppercase mb-3">&gt;_ CURRENTLY BUILDING</p>
-            <p className="text-text-secondary text-sm leading-relaxed">{profile.currentlyBuilding}</p>
-          </motion.div>
+          </Reveal>
         </div>
 
-        {/* Right column */}
-        <motion.div className="flex flex-col gap-6" {...anim(0.2)}>
-          <div className="w-full aspect-square max-w-xs mx-auto lg:mx-0 rounded-3xl overflow-hidden glow-blue border border-border">
-            <img
-              src="/images/myProfile.jpg"
-              alt="Joshua Canta"
-              className="w-full h-full object-cover"
-            />
-          </div>
+        {/* The desk mat: the person, the current build, and what's off the clock. */}
+        <Reveal className="mt-14 rounded-[28px] border border-line bg-panel p-5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.9)] sm:p-10 lg:p-14">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-14">
+            <motion.div
+              className="self-start lg:mt-4"
+              initial={{ rotate: 6, y: 40, opacity: 0 }}
+              whileInView={{ rotate: -3, y: 0, opacity: 1 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+            >
+              <figure className="cap cap-cream block w-full max-w-sm p-2.5 pb-5">
+                <img
+                  src="/images/myProfile.jpg"
+                  alt="Joshua Canta"
+                  className="aspect-[4/5] w-full rounded-lg object-cover"
+                  loading="lazy"
+                />
+                <figcaption className="legend mt-3 inline-flex items-center gap-1.5 px-1 text-sm">
+                  <Icon icon="mdi:map-marker-outline" className="h-4 w-4" aria-hidden />
+                  {profile.location} · open to remote
+                </figcaption>
+              </figure>
+            </motion.div>
 
-          <div className="bg-surface border border-border rounded-2xl p-6">
-            <p className="font-mono text-emerald-accent text-xs tracking-widest uppercase mb-4">&gt;_ EDUCATION</p>
-            <p className="text-text-primary font-bold text-lg">{profile.education.school}</p>
-            <p className="text-text-secondary text-sm">{profile.education.degree}</p>
-            <p className="text-text-muted text-xs mt-1">{profile.education.period} · {profile.education.location}</p>
-          </div>
+            <div className="flex flex-col gap-10">
+              <p className="max-w-[60ch] text-lg leading-relaxed text-muted">{profile.bioExtended}</p>
 
-          <div className="bg-surface border border-border rounded-2xl p-6">
-            <p className="font-mono text-emerald-accent text-xs tracking-widest uppercase mb-4">&gt;_ INTERESTS</p>
-            <div className="grid grid-cols-2 gap-3">
-              {profile.interests.map((interest) => (
-                <div key={interest.label} className="flex items-center gap-2.5 text-text-secondary text-sm">
-                  <Icon icon={interest.icon} className="w-4 h-4 text-blue-light flex-shrink-0" />
-                  {interest.label}
-                </div>
-              ))}
+              <p className="display max-w-[22ch] text-[clamp(1.6rem,2.6vw,2.25rem)] leading-tight">
+                Currently building <span className="text-rose">{profile.currentlyBuilding}</span>
+              </p>
+
+              <div>
+                <h3 className="text-xl font-bold">Off the clock</h3>
+                <KeyTray className="mt-5 grid grid-cols-2 items-end gap-3 xl:grid-cols-4">
+                  {profile.interests.map((it, i) => {
+                    const a = ARTISANS[i % ARTISANS.length]
+                    return (
+                      <motion.div
+                        key={it.label}
+                        variants={dropKey}
+                        className={`cap ${a.tone} legend ${a.size} w-full flex-col justify-between`}
+                      >
+                        <Icon icon={it.icon} className="h-8 w-8" aria-hidden />
+                        <span className="text-base leading-tight">{it.label}</span>
+                      </motion.div>
+                    )
+                  })}
+                </KeyTray>
+              </div>
             </div>
           </div>
-
-          <div className="flex items-center gap-2 text-text-muted text-sm px-1">
-            <Icon icon="mdi:map-marker-outline" className="w-4 h-4" />
-            {profile.location}
-          </div>
-        </motion.div>
+        </Reveal>
       </div>
     </section>
   )

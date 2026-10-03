@@ -14,9 +14,9 @@ export const profile = {
   availabilityText: 'Open to new opportunities',
   bio: 'Full Stack Software Engineer with 5+ years building production systems for the hospitality industry. I specialize in ReactJS frontends and Go backends, with deep experience designing SQL schemas, RESTful APIs, and role-based access systems from the ground up.',
   bioExtended: 'I care about writing clean, maintainable code and building software that actually solves problems — whether that\'s an AI-powered financial tool, a CRM platform serving hotels and resorts, or an interactive web experience. Outside of work, I explore AI integrations, game dev, and building personal projects that keep my skills sharp.',
-  location: 'San Marcos, TX',
-  email: 'joshdc1288@gmail.com',
-  resumeUrl: 'https://drive.google.com/file/d/1XPLcOIjzFGBdqmpkmLU7iiHVqMuC0bQr/view',
+  location: 'Austin, TX',
+  email: 'joshuadcanta@gmail.com',
+  resumeUrl: 'https://drive.google.com/file/d/179FmyTN0SVi7tWNnPi_cpgk0M90B35eF/view?usp=sharing',
   social: {
     github: 'https://github.com/Artesod',
     linkedin: 'https://www.linkedin.com/in/joshuacanta/',

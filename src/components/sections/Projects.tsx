@@ -1,234 +1,190 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import type { CSSProperties } from 'react'
+import { motion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { projects, type Project } from '../../data/projects'
-import { Badge } from '../ui/Badge'
+import { KeyTray, Parallax, Reveal, Title, dropKey } from '../ui/motion'
+
+interface Colorway {
+  name: string
+  mat: string
+  caption: string
+  caps: { cap: string; side: string; ink: string }[]
+}
+
+// Every project ships as its own keycap set.
+const COLORWAYS: Record<string, Colorway> = {
+  // Taken from Rebel Budget's own palette: red shell, LCD green, brass buttons, chrome keys.
+  'rebel-budget': {
+    name: 'Pocket Pet',
+    mat: '#561014',
+    caption: '#ecc463',
+    caps: [
+      { cap: '#b8c4a0', side: '#9dab87', ink: '#1d2320' },
+      { cap: '#a3262a', side: '#7a1a1e', ink: '#e8ecef' },
+      { cap: '#d9a93a', side: '#9c7420', ink: '#1d2320' },
+      { cap: '#e8ecef', side: '#aeb6bb', ink: '#1d2320' },
+    ],
+  },
+  'perfect-season': {
+    name: 'Eighty-Two',
+    mat: '#100f1a',
+    caption: '#29d8f2',
+    caps: [
+      { cap: '#2a2742', side: '#1b1930', ink: '#f4f2fc' },
+      { cap: '#ff2e97', side: '#c71a72', ink: '#100f1a' },
+      { cap: '#29d8f2', side: '#159db2', ink: '#100f1a' },
+    ],
+  },
+  'percipia-website': {
+    name: 'Front Desk',
+    mat: '#0b110b',
+    caption: '#7ce36a',
+    caps: [
+      { cap: '#1e231e', side: '#121612', ink: '#e9f5e6' },
+      { cap: '#6fd35d', side: '#4a9b3c', ink: '#0b110b' },
+      { cap: '#e9f0e7', side: '#bfc8bd', ink: '#0b110b' },
+    ],
+  },
+  'personal-website': {
+    name: 'Olivia Dark',
+    mat: '#2b252a',
+    caption: '#e8a2a8',
+    caps: [
+      { cap: '#262226', side: '#171417', ink: '#f3d9d4' },
+      { cap: '#e8a2a8', side: '#b9757c', ink: '#1a1518' },
+      { cap: '#1d1a1d', side: '#0f0d0f', ink: '#e8a2a8' },
+      { cap: '#efe6dc', side: '#c4b8ab', ink: '#1a1518' },
+    ],
+  },
+}
+
+const FALLBACK = COLORWAYS['personal-website']
 
 export function Projects() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-20%' })
-
-  const featured = projects.find((p) => p.featured)
-  const rest = projects.filter((p) => !p.featured)
-
+  // Live work with real screenshots leads; projects without a public build follow.
+  const ordered = [...projects].sort((a, b) => Number(Boolean(b.shots)) - Number(Boolean(a.shots)))
   return (
-    <section id="projects" className="section-snap flex items-center relative px-6">
-      <div className="absolute top-1/3 left-0 w-80 h-80 bg-blue-accent/8 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-64 h-64 bg-emerald-accent/6 rounded-full blur-[100px] pointer-events-none" />
+    <section id="projects" className="bg-ground text-blush">
+      <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
+        <header className="max-w-3xl">
+          <Title className="text-[clamp(2.75rem,7vw,5.5rem)]">Projects</Title>
+          <Reveal as="p" className="mt-5 max-w-[56ch] text-lg leading-relaxed text-muted" delay={0.1}>
+            Each one gets its own colorway. The keys are the stack it actually runs on.
+          </Reveal>
+        </header>
 
-      <div ref={ref} className="max-w-7xl mx-auto w-full py-20">
-        {/* Section header */}
-        <div className="mb-10">
-          <motion.p
-            className="font-mono text-emerald-accent text-sm tracking-widest uppercase mb-3"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.4 }}
-          >
-            &gt;_ PROJECTS
-          </motion.p>
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <motion.h2
-              className="text-5xl md:text-6xl font-black text-text-primary"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              What I've Built
-            </motion.h2>
-            <motion.p
-              className="text-text-secondary text-base max-w-sm text-right hidden md:block"
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              A selection of personal and professional projects.
-            </motion.p>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-6">
-          {/* Featured project — full-width horizontal card */}
-          {featured && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              className="bg-surface border border-border rounded-3xl p-8 hover:border-blue-accent/50 transition-colors duration-300 group"
-            >
-              {/* Header row */}
-              <div className="flex items-start justify-between gap-4 mb-6">
-                <div>
-                  <span className="font-mono text-emerald-accent text-xs tracking-widest uppercase block mb-1">★ Featured Project</span>
-                  <h3 className="text-text-primary font-bold text-3xl md:text-4xl group-hover:text-blue-light transition-colors duration-300">
-                    {featured.title}
-                  </h3>
-                  <span className="text-text-muted text-sm font-mono">{featured.year}</span>
-                </div>
-                <div className="flex gap-4 flex-shrink-0 items-center pt-1">
-                  {featured.githubUrl && (
-                    <a href={featured.githubUrl} target="_blank" rel="noopener noreferrer"
-                      className="text-text-muted hover:text-text-primary transition-colors duration-200 flex items-center gap-1.5 text-sm">
-                      <Icon icon="mdi:github" className="w-5 h-5" />
-                      <span className="hidden sm:inline">Source</span>
-                    </a>
-                  )}
-                  {featured.liveUrl && (
-                    <a href={featured.liveUrl} target="_blank" rel="noopener noreferrer"
-                      className="text-text-muted hover:text-emerald-accent transition-colors duration-200 flex items-center gap-1.5 text-sm">
-                      <Icon icon="mdi:open-in-new" className="w-5 h-5" />
-                      <span className="hidden sm:inline">Live</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Two-column body */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
-                <div className="flex flex-col gap-4">
-                  <p className="text-text-secondary text-base leading-relaxed">{featured.longDescription}</p>
-                  <div className="flex flex-wrap gap-2 mt-auto pt-2 border-t border-border">
-                    {featured.tech.map((t) => <Badge key={t} label={t} />)}
-                  </div>
-                </div>
-                <ul className="flex flex-col gap-3">
-                  {featured.highlights.map((h) => (
-                    <li key={h} className="flex gap-3 text-text-secondary text-sm leading-relaxed">
-                      <span className="text-emerald-accent mt-0.5 flex-shrink-0">▸</span>
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Remaining projects — 2-column grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {rest.map((project, idx) => project.theme === 'perfect-season' ? (
-              <PerfectSeasonCard key={project.id} project={project} inView={inView} delay={0.35 + idx * 0.1} />
-            ) : (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.35 + idx * 0.1 }}
-                className="bg-surface border border-border rounded-2xl p-6 hover:border-blue-accent/50 transition-colors duration-300 group flex flex-col gap-4"
-              >
-                {/* Header */}
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <h3 className="text-text-primary font-bold text-xl group-hover:text-blue-light transition-colors duration-300">
-                      {project.title}
-                    </h3>
-                    <span className="text-text-muted text-xs font-mono">{project.year}</span>
-                  </div>
-                  <div className="flex gap-3 flex-shrink-0 items-center">
-                    {project.githubUrl && (
-                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-text-muted hover:text-text-primary transition-colors duration-200">
-                        <Icon icon="mdi:github" className="w-5 h-5" />
-                      </a>
-                    )}
-                    {project.liveUrl && (
-                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-                        className="text-text-muted hover:text-emerald-accent transition-colors duration-200">
-                        <Icon icon="mdi:open-in-new" className="w-5 h-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                <p className="text-text-secondary text-sm leading-relaxed">{project.longDescription}</p>
-
-                <ul className="flex flex-col gap-1.5">
-                  {project.highlights.slice(0, 3).map((h) => (
-                    <li key={h} className="flex gap-2.5 text-text-muted text-xs leading-relaxed">
-                      <span className="text-emerald-accent flex-shrink-0">▸</span>
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="flex flex-wrap gap-2 mt-auto pt-3 border-t border-border">
-                  {project.tech.map((t) => <Badge key={t} label={t} />)}
-                </div>
-              </motion.div>
-            ))}
-          </div>
+        <div className="mt-16 space-y-28 sm:mt-24 sm:space-y-40">
+          {ordered.map((p, i) => (
+            <ProjectSet key={p.id} project={p} flip={i % 2 === 1} />
+          ))}
         </div>
       </div>
     </section>
   )
 }
 
-// Mirrors the neon pink/cyan look of the Perfect Season app itself
-function PerfectSeasonCard({ project, inView, delay }: { project: Project; inView: boolean; delay: number }) {
-  const [first, ...restWords] = project.title.split(' ')
-
+function ProjectSet({ project: p, flip }: { project: Project; flip: boolean }) {
+  const cw = COLORWAYS[p.id] ?? FALLBACK
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.5, delay }}
-      className="relative overflow-hidden rounded-2xl p-6 flex flex-col gap-4 border border-[#2a2742] bg-[#100f1a] text-[#c9c6da] hover:border-[#ff2e97] hover:shadow-[0_0_24px_#ff2e974d] transition-[border-color,box-shadow] duration-300"
-      style={{
-        background:
-          'radial-gradient(500px 220px at 0% -10%, #ff2e9722, transparent), radial-gradient(500px 220px at 100% -10%, #29d8f21c, transparent), #100f1a',
-        fontFamily: 'system-ui, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-      }}
+    <article id={`project-${p.id}`} className="grid items-center gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
+      <Board project={p} colorway={cw} className={flip ? 'lg:order-2' : ''} />
+
+      <Reveal>
+        <h3 className={`display ${p.featured ? 'text-[clamp(2.5rem,5vw,4.25rem)]' : 'text-[clamp(2rem,4vw,3.25rem)]'}`}>
+          {p.title}
+        </h3>
+        <p className="mt-5 max-w-[60ch] text-lg leading-relaxed text-blush/90">{p.longDescription}</p>
+        <ul className="mt-6 max-w-[60ch] space-y-2.5">
+          {p.highlights.map((h) => (
+            <li key={h} className="flex gap-3 leading-relaxed text-muted">
+              <span className="mt-[0.45em] h-2.5 w-2.5 shrink-0 rounded-[3px]" style={{ background: cw.caption }} aria-hidden />
+              {h}
+            </li>
+          ))}
+        </ul>
+        {(p.liveUrl || p.githubUrl) && (
+          <div className="mt-8 flex flex-wrap gap-3">
+            {p.liveUrl && (
+              <a href={p.liveUrl} target="_blank" rel="noopener noreferrer" className="cap cap-rose legend">
+                <span className="inline-flex items-center gap-1.5 px-1">
+                  {p.id === 'perfect-season' ? 'Play it' : 'Visit live'}
+                  <Icon icon="mdi:arrow-top-right" className="h-4 w-4" aria-hidden />
+                </span>
+              </a>
+            )}
+            {p.githubUrl && (
+              <a href={p.githubUrl} target="_blank" rel="noopener noreferrer" className="cap cap-alpha legend">
+                <span className="inline-flex items-center gap-1.5 px-1">
+                  <Icon icon="mdi:github" className="h-4 w-4" aria-hidden />
+                  Source
+                </span>
+              </a>
+            )}
+          </div>
+        )}
+      </Reveal>
+    </article>
+  )
+}
+
+/** The project's desk: real screenshots on its colorway mat, its stack as keycaps in front. */
+function Board({ project: p, colorway: cw, className = '' }: { project: Project; colorway: Colorway; className?: string }) {
+  const [hero, behind] = p.shots ?? []
+  return (
+    <figure
+      className={`relative overflow-hidden rounded-[24px] p-5 sm:p-8 ${className}`}
+      style={{ background: cw.mat, boxShadow: `0 30px 60px -30px ${cw.caption}40` }}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h3
-            className="uppercase tracking-[3px] text-xl text-[#f4f2fc]"
-            style={{ fontFamily: '"Segoe UI Semibold", "Arial Narrow", system-ui, sans-serif' }}
-          >
-            {first}{' '}
-            <span className="text-[#ff2e97] [text-shadow:0_0_16px_#ff2e9773]">{restWords.join(' ')}</span>
-          </h3>
-          <span className="text-[#29d8f2] text-xs uppercase tracking-[2px] font-semibold [text-shadow:0_0_10px_#29d8f273]">
-            Go 82–0. Or go home.
-          </span>
-        </div>
-        <div className="flex gap-3 flex-shrink-0 items-center">
-          {project.githubUrl && (
-            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer"
-              className="text-[#85819e] hover:text-[#f4f2fc] transition-colors duration-200">
-              <Icon icon="mdi:github" className="w-5 h-5" />
-            </a>
+      {hero && (
+        <div className="relative mb-[-0.75rem] pr-3 pt-3 sm:mb-[-1rem]">
+          {behind && (
+            <motion.img
+              src={behind.src}
+              alt={behind.alt}
+              loading="lazy"
+              className="absolute -right-4 -top-1 w-[62%] rounded-xl border border-white/10 shadow-[0_24px_50px_-10px_rgb(0_0_0/0.95)]"
+              initial={{ rotate: 0, x: -30 }}
+              whileInView={{ rotate: 4, x: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            />
           )}
-          {project.liveUrl && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-              className="text-[#85819e] hover:text-[#ff2e97] transition-colors duration-200">
-              <Icon icon="mdi:open-in-new" className="w-5 h-5" />
-            </a>
-          )}
+          <Parallax distance={24} className="relative">
+            <img
+              src={hero.src}
+              alt={hero.alt}
+              loading="lazy"
+              className="w-full rounded-xl border border-white/10 shadow-[0_24px_50px_-12px_rgb(0_0_0/0.9)]"
+            />
+          </Parallax>
         </div>
-      </div>
+      )}
 
-      <p className="text-sm leading-relaxed">{project.longDescription}</p>
+      <KeyTray className={`relative flex flex-wrap gap-2 sm:gap-3 ${hero ? 'pl-2' : 'py-6'}`}>
+        {p.tech.map((t, i) => {
+          const c = cw.caps[i % cw.caps.length]
+          const style = { '--cap': c.cap, '--side': c.side, '--ink': c.ink } as CSSProperties
+          return (
+            <motion.span
+              key={t}
+              variants={dropKey}
+              className={`cap legend min-w-[calc(var(--mw)*0.72)] sm:min-w-[var(--mw)] ${hero ? 'min-h-[2.75rem] text-xs sm:min-h-[3.75rem] sm:text-sm' : 'min-h-[3.75rem] text-sm sm:min-h-[5rem] sm:text-base'}`}
+              style={{ ...style, '--mw': `${Math.max(3.25, t.length * 0.58 + 1.5)}rem` } as CSSProperties}
+            >
+              <span>{t}</span>
+            </motion.span>
+          )
+        })}
+      </KeyTray>
 
-      <ul className="flex flex-col gap-1.5">
-        {project.highlights.slice(0, 3).map((h) => (
-          <li key={h} className="flex gap-2.5 text-[#85819e] text-xs leading-relaxed">
-            <span className="text-[#ff2e97] flex-shrink-0">▸</span>
-            {h}
-          </li>
-        ))}
-      </ul>
-
-      <div className="flex flex-wrap gap-2 mt-auto pt-3 border-t border-[#2a2742]">
-        {project.tech.map((t) => (
-          <span
-            key={t}
-            className="px-2.5 py-1 rounded-xl bg-[#29d8f21f] text-[#29d8f2] text-xs font-semibold whitespace-nowrap"
-          >
-            {t}
-          </span>
-        ))}
-      </div>
-    </motion.div>
+      <figcaption className="legend mt-7 flex items-baseline justify-between gap-4 text-xs" style={{ color: cw.caption }}>
+        <span>
+          {p.title} · Colorway “{cw.name}”
+        </span>
+        <span className="whitespace-nowrap tabular-nums">
+          {p.year} · {p.tech.length} keys
+        </span>
+      </figcaption>
+    </figure>
   )
 }

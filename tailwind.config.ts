@@ -1,34 +1,29 @@
 import type { Config } from 'tailwindcss'
 
+// Colorway "Olivia Dark": black caps, rose legends, rose accent keys, cream novelties.
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        base: '#020c1b',
-        surface: '#071828',
-        border: '#1a3f5c',
-        blue: {
-          accent: '#3b82f6',
-          light: '#93c5fd',
+        ground: '#121012',
+        panel: '#1b171b',
+        well: '#0b090b',
+        line: '#2f292e',
+        blush: '#f3d9d4',
+        muted: '#b7a5a6',
+        rose: {
+          DEFAULT: '#e8a2a8',
+          side: '#b9757c',
+          deep: '#d4848b',
         },
-        emerald: {
-          accent: '#10b981',
-          light: '#6ee7b7',
-        },
-        text: {
-          primary: '#f1f5f9',
-          secondary: '#d0e4f7',
-          muted: '#b0c8e0',
-        },
+        cream: '#efe6dc',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        sans: ['Archivo', 'system-ui', 'sans-serif'],
       },
-      backgroundImage: {
-        'gradient-accent': 'linear-gradient(90deg, #3b82f6, #10b981)',
-        'gradient-accent-diag': 'linear-gradient(135deg, #3b82f6, #10b981)',
+      maxWidth: {
+        page: '78rem',
       },
     },
   },

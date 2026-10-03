@@ -5,47 +5,241 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    background-color: #121012;
+    scrollbar-color: #e8a2a8 #121012;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 
   body {
-    background-color: #020c1b;
-    color: #f1f5f9;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow: hidden;
+    background-color: #121012;
+    color: #f3d9d4;
+    font-family: 'Archivo', system-ui, sans-serif;
+    font-variation-settings: 'wdth' 100;
+    -webkit-font-smoothing: antialiased;
+    caret-color: #e8a2a8;
   }
 
-  #scroll-container {
-    height: 100vh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
+  ::selection {
+    background: #e8a2a8;
+    color: #121012;
   }
 
-  #scroll-container::-webkit-scrollbar {
-    width: 0;
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #121012;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #e8a2a8;
+    border: 3px solid #121012;
+    border-radius: 6px;
+  }
+
+  :focus-visible {
+    outline: 2px solid #e8a2a8;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1.5px;
   }
 }
 
-@layer utilities {
-  .section-snap {
-    scroll-snap-align: start;
-    min-height: 100vh;
+@layer components {
+  /* Expanded display voice, cut like a keycap brand logo. */
+  .display {
+    font-variation-settings: 'wdth' 125;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  .legend {
+    font-variation-settings: 'wdth' 112;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  /*
+   * Sculpted keycap. The outer box is the skirt, ::before is the dished top.
+   * Colors come from --cap (top), --side (skirt), --ink (legend).
+   */
+  .cap {
+    --cap: #262226;
+    --side: #171417;
+    --ink: #f3d9d4;
+    --travel: 0px;
     position: relative;
-    overflow-x: hidden;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    color: var(--ink);
+    background: var(--side);
+    border-radius: 0.45em;
+    padding: 0.32em 0.42em 0.62em;
+    box-shadow:
+      0 calc(4px - var(--travel)) calc(6px - var(--travel)) rgb(0 0 0 / 0.55),
+      0 1px 0 rgb(255 255 255 / 0.06) inset;
+    transform: translateY(var(--travel));
+    transition:
+      transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1);
+    isolation: isolate;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .cap::before {
+    content: '';
+    position: absolute;
+    inset: 0.12em 0.16em 0.4em;
+    border-radius: 0.36em;
+    background:
+      radial-gradient(120% 90% at 50% 20%, rgb(255 255 255 / 0.09), transparent 60%),
+      var(--cap);
+    box-shadow: 0 -1px 0 rgb(0 0 0 / 0.08) inset;
+    z-index: -1;
+  }
+  .cap > * {
+    position: relative;
+  }
+  .cap.is-down,
+  button.cap:active,
+  a.cap:active {
+    --travel: 3px;
+    transition-duration: 60ms;
+  }
+  @media (hover: hover) {
+    button.cap:hover,
+    a.cap:hover {
+      --travel: 1px;
+    }
+  }
+  button.cap:disabled {
+    opacity: 0.6;
+    cursor: progress;
   }
 
-  .gradient-text {
-    background: linear-gradient(90deg, #3b82f6, #10b981);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  /* 65% board: 16 units per row, unit sized from the board's own width. */
+  .kb-case {
+    --gap: clamp(2px, 0.45cqw, 6px);
+    --u: calc((100cqw - 2 * clamp(6px, 1.6cqw, 18px) - 2 * clamp(3px, 0.8cqw, 9px) - 15 * var(--gap)) / 16);
+    max-width: 100%;
+  }
+  .kb-row {
+    display: flex;
+    gap: var(--gap);
+  }
+  .kb-row + .kb-row {
+    margin-top: var(--gap);
+  }
+  .kb-key {
+    width: calc(var(--u) * var(--w) + var(--gap) * (var(--w) - 1));
+    height: var(--u);
+    flex: none;
+    font-size: clamp(6px, calc(var(--u) * 0.2), 14px);
+    border-radius: clamp(3px, calc(var(--u) * 0.12), 8px);
+    cursor: pointer;
+  }
+  .kb-legend {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1em;
+    line-height: 1;
+    text-align: left;
+  }
+  .kb-wide .kb-legend {
+    font-size: 0.9em;
+  }
+  .kb-shift {
+    opacity: 0.6;
+  }
+  .kb-word {
+    font-size: 0.82em;
+    letter-spacing: 0;
+  }
+  .kb-logo {
+    width: 2.4em;
+  }
+  .kb-icon {
+    width: 1.35em;
+    height: 1.35em;
+  }
+  .kb-led {
+    position: absolute;
+    right: 0.6em;
+    top: 0.55em;
+    width: 0.45em;
+    height: 0.45em;
+    border-radius: 50%;
+    background: #0b090b;
+    transition: background-color 160ms, box-shadow 160ms;
+  }
+  .kb-led.is-on {
+    background: #e8a2a8;
+    box-shadow: 0 0 6px 1px rgb(232 162 168 / 0.7);
+  }
+  /* Narrow screens: keep keys finger-sized and let the board scroll sideways. */
+  .kb-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 8px;
+  }
+  .kb-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  @container (max-width: 720px) {
+    .kb-case {
+      --u: 40px;
+      width: max-content;
+    }
+    .kb-key {
+      font-size: 10px;
+    }
+    .kb-word,
+    .kb-shift {
+      display: none;
+    }
   }
 
-  .glow-blue {
-    box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+  /* Olivia Dark: black alphas with rose legends, darker mods, rose accents, cream novelties. */
+  .cap-alpha {
+    --cap: #262226;
+    --side: #171417;
+    --ink: #f3d9d4;
+  }
+  .cap-mod {
+    --cap: #1d1a1d;
+    --side: #0f0d0f;
+    --ink: #e8a2a8;
+  }
+  .cap-rose {
+    --cap: #e8a2a8;
+    --side: #b9757c;
+    --ink: #1a1518;
+  }
+  .cap-cream {
+    --cap: #efe6dc;
+    --side: #c4b8ab;
+    --ink: #1a1518;
   }
 
-  .glow-emerald {
-    box-shadow: 0 0 40px rgba(16, 185, 129, 0.25);
+  /* The JC mark as a tintable shape: fills with currentColor. */
+  .logo-mark {
+    display: inline-block;
+    aspect-ratio: 480 / 391;
+    background-color: currentColor;
+    -webkit-mask: url('/logo-mark.png') center / contain no-repeat;
+    mask: url('/logo-mark.png') center / contain no-repeat;
   }
 }

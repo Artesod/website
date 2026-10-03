@@ -1,73 +1,93 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Icon } from '@iconify/react'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { skillCategories } from '../../data/skills'
+import { usesOf } from '../../data/techIndex'
+import { thockIfOn } from '../../lib/thock'
+import { KeyTray, Reveal, Title, dropKey } from '../ui/motion'
+
+// Each group ships as its own tray, kitted like a keycap set: alphas, mods, accents, novelties.
+const TRAY_TONE = ['cap-alpha', 'cap-mod', 'cap-cream', 'cap-rose']
+
+function keyWidth(name: string): number {
+  if (name.length <= 3) return 1
+  if (name.length <= 6) return 1.5
+  if (name.length <= 9) return 2
+  return 2.5
+}
 
 export function Skills() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-20%' })
+  const [picked, setPicked] = useState('Go')
+  const uses = usesOf(picked)
 
   return (
-    <section id="skills" className="section-snap flex items-center relative px-6 overflow-y-auto">
-      <div className="absolute bottom-0 right-0 w-72 h-72 bg-emerald-accent/8 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute top-1/4 left-1/3 w-64 h-64 bg-blue-accent/6 rounded-full blur-[100px] pointer-events-none" />
-
-      <div ref={ref} className="max-w-7xl mx-auto w-full py-16">
-        <motion.p
-          className="font-mono text-emerald-accent text-sm tracking-widest uppercase mb-4"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.4 }}
-        >
-          &gt;_ SKILLS
-        </motion.p>
-        <motion.h2
-          className="text-5xl md:text-6xl font-black text-text-primary mb-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          What I Work With
-        </motion.h2>
-        <motion.p
-          className="text-text-secondary text-lg mb-10 max-w-2xl"
-          initial={{ opacity: 0, y: 10 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.15 }}
-        >
-          Technologies I've shipped production code with across frontend, backend, and infrastructure.
-        </motion.p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {skillCategories.map((category, catIdx) => (
-            <motion.div
-              key={category.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + catIdx * 0.1 }}
-              className="bg-surface border border-border rounded-2xl p-6 hover:border-blue-accent/30 transition-colors duration-300"
-            >
-              <div className="flex items-start justify-between gap-4 mb-2">
-                <h3 className="text-text-primary text-base font-bold">{category.label}</h3>
-                <span className="text-text-muted font-mono text-xs">{category.skills.length} skills</span>
+    <section id="kit" className="bg-ground text-blush">
+      <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.7fr] lg:gap-16">
+          <header className="lg:sticky lg:top-28 lg:self-start">
+            <Title className="text-[clamp(2.75rem,7vw,5.5rem)]">The kit</Title>
+            <Reveal as="p" className="mt-5 max-w-[40ch] text-xl leading-relaxed text-muted" delay={0.1}>
+              Everything on the desk, sorted into trays. Press a key to see where it's been used.
+            </Reveal>
+            <Reveal delay={0.15} className="mt-8 rounded-xl border border-line bg-well p-6">
+              <div aria-live="polite">
+                <motion.p
+                  key={picked}
+                  className="display text-3xl text-rose"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35 }}
+                >
+                  {picked}
+                </motion.p>
+                {uses.length === 0 ? (
+                  <p className="mt-3 text-muted">In daily use; no public project lists it yet.</p>
+                ) : (
+                  <ul className="mt-3 space-y-1.5">
+                    {uses.map((u) => (
+                      <li key={u.kind + u.id}>
+                        <a
+                          href={u.kind === 'project' ? `#project-${u.id}` : `#role-${u.id}`}
+                          className="underline decoration-blush/30 hover:decoration-rose"
+                        >
+                          {u.title}
+                        </a>
+                        <span className="ml-2 tabular-nums text-muted">{u.when}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <p className="text-text-muted text-xs mb-5">{category.description}</p>
-              <div className="flex flex-wrap gap-2.5">
-                {category.skills.map((skill, skillIdx) => (
-                  <motion.span
-                    key={skill.name}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.3, delay: 0.3 + catIdx * 0.1 + skillIdx * 0.035 }}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-base border border-border rounded-full text-text-secondary text-sm font-medium hover:border-blue-accent hover:text-text-primary transition-colors duration-200 cursor-default"
-                  >
-                    <Icon icon={skill.icon} className="w-4 h-4" />
-                    {skill.name}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+            </Reveal>
+          </header>
+
+          <div className="space-y-6">
+            {skillCategories.map((cat, gi) => (
+              <Reveal key={cat.label} className="rounded-2xl border border-line bg-[#2b252a] p-5 shadow-[inset_0_3px_12px_rgb(0_0_0/0.45)] sm:p-7">
+                <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <h3 className="text-2xl font-bold">{cat.label}</h3>
+                  <p className="text-base text-muted">{cat.description}</p>
+                </div>
+                <KeyTray className="mt-5 flex flex-wrap gap-2.5">
+                  {cat.skills.map((s) => (
+                    <motion.div key={s.name} variants={dropKey}>
+                      <button
+                        type="button"
+                        aria-pressed={picked === s.name}
+                        onClick={() => {
+                          thockIfOn()
+                          setPicked(s.name)
+                        }}
+                        className={`cap ${TRAY_TONE[gi % TRAY_TONE.length]} legend h-16 text-sm sm:h-[4.5rem] sm:text-base ${picked === s.name ? 'is-down' : ''}`}
+                        style={{ width: `${keyWidth(s.name) * 4.5}rem` }}
+                      >
+                        <span>{s.name}</span>
+                      </button>
+                    </motion.div>
+                  ))}
+                </KeyTray>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>

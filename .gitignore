@@ -19,6 +19,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+PRODUCT.md
+DESIGN.md
+.impeccable/
 
 npm-debug.log*
 yarn-debug.log*

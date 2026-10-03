@@ -1,121 +1,90 @@
-import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Icon } from '@iconify/react'
+import { motion, useScroll } from 'framer-motion'
 import { experiences } from '../../data/experience'
-import { Badge } from '../ui/Badge'
+import { profile } from '../../data/profile'
+import { KeyTray, Reveal, Title, dropKey } from '../ui/motion'
 
 export function Experience() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-20%' })
+  const logRef = useRef<HTMLOListElement>(null)
+  const { scrollYProgress } = useScroll({ target: logRef, offset: ['start 70%', 'end 60%'] })
 
   return (
-    <section id="experience" className="section-snap flex items-center relative px-6">
-      <div className="absolute top-0 right-1/4 w-72 h-72 bg-emerald-accent/8 rounded-full blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-accent/6 rounded-full blur-[100px] pointer-events-none" />
+    <section id="work" className="bg-panel text-blush">
+      <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
+        <header className="max-w-3xl">
+          <Title className="text-[clamp(2.75rem,7vw,5.5rem)]">Work</Title>
+          <Reveal as="p" className="mt-5 max-w-[56ch] text-lg leading-relaxed text-muted" delay={0.1}>
+            The build log. Where the production hours went.
+          </Reveal>
+        </header>
 
-      <div ref={ref} className="w-full px-12 py-16">
-        {/* Section header */}
-        <div className="mb-8">
-          <motion.p
-            className="font-mono text-emerald-accent text-sm tracking-widest uppercase mb-3"
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.4 }}
-          >
-            &gt;_ EXPERIENCE
-          </motion.p>
-          <div className="flex items-end justify-between gap-4 flex-wrap">
-            <motion.h2
-              className="text-5xl md:text-6xl font-black text-text-primary"
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              Where I've Worked
-            </motion.h2>
+        <div className="relative mt-16 sm:mt-24">
+          {/* The log's spine fills in as you read down it. */}
+          <div className="absolute bottom-0 left-0 top-0 hidden w-[2px] bg-line lg:block" aria-hidden>
+            <motion.div className="h-full w-full origin-top bg-rose" style={{ scaleY: scrollYProgress }} />
           </div>
-        </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-px bg-gradient-to-b from-blue-accent via-emerald-accent to-transparent hidden md:block" />
-
-          <div className="flex flex-col gap-6">
-            {experiences.map((entry, idx) => (
-              <motion.div
-                key={entry.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.5, delay: 0.25 + idx * 0.15 }}
-                className="md:pl-10 relative"
+          <ol ref={logRef} className="lg:pl-12">
+            {experiences.map((x) => (
+              <li
+                key={x.id}
+                id={`role-${x.id}`}
+                className="grid gap-8 border-t border-line py-14 first:border-t-0 first:pt-0 lg:grid-cols-[16rem_1fr] lg:gap-14"
               >
-                <div className="absolute left-0 top-3 w-3 h-3 rounded-full bg-blue-accent -translate-x-[5px] ring-4 ring-base hidden md:block" />
+                <Reveal className="lg:sticky lg:top-28 lg:self-start">
+                  <p className="legend tabular-nums text-rose">{x.period}</p>
+                  <p className="mt-3 text-2xl font-bold leading-tight">{x.company}</p>
+                  <p className="mt-1 text-muted">{x.location}</p>
+                </Reveal>
 
-                <div className="bg-surface border border-border rounded-2xl hover:border-blue-accent/50 transition-colors duration-300 overflow-hidden">
-                  {/* Two-column interior */}
-                  <div className="grid grid-cols-1 lg:grid-cols-7">
+                <div>
+                  <Reveal>
+                    <h3 className="display text-[clamp(1.9rem,3.6vw,3rem)]">{x.role}</h3>
+                    <p className="mt-5 max-w-[62ch] text-lg leading-relaxed text-blush/90">{x.summary}</p>
+                  </Reveal>
 
-                    {/* Left: company meta */}
-                    <div className="lg:col-span-2 p-6 lg:border-r border-border flex flex-col gap-3">
-                      <div>
-                        <h3 className="text-text-primary font-bold text-2xl">{entry.company}</h3>
-                        <p className="text-blue-light text-sm font-medium mt-0.5">{entry.role}</p>
-                      </div>
+                  <ul className="mt-8 max-w-[68ch] space-y-3">
+                    {x.bullets.map((b, i) => (
+                      <Reveal as="li" key={b} delay={i * 0.04} className="flex gap-3 leading-relaxed text-muted">
+                        <span className="mt-[0.5em] h-2 w-2 shrink-0 rounded-[2px] bg-rose/70" aria-hidden />
+                        {b}
+                      </Reveal>
+                    ))}
+                  </ul>
 
-                      <div className="flex flex-wrap gap-2">
-                        <span className="font-mono text-text-muted text-xs bg-base px-3 py-1 rounded-full border border-border">
-                          {entry.period}
-                        </span>
-                        <span className="text-text-muted text-xs flex items-center gap-1 bg-base px-3 py-1 rounded-full border border-border">
-                          <Icon icon="mdi:map-marker-outline" className="w-3 h-3" />
-                          {entry.location}
-                        </span>
-                      </div>
+                  <Reveal className="mt-10 rounded-xl bg-well p-6 sm:p-8">
+                    <ul aria-label="Results" className="grid gap-4 sm:grid-cols-2">
+                      {x.achievements.map((a) => (
+                        <li key={a} className="flex gap-3 text-lg font-semibold leading-snug">
+                          <span className="mt-[0.4em] h-2.5 w-2.5 shrink-0 rounded-[3px] bg-rose" aria-hidden />
+                          {a}
+                        </li>
+                      ))}
+                    </ul>
+                  </Reveal>
 
-                      <p className="text-text-secondary text-xs leading-relaxed italic border-l-2 border-blue-accent/40 pl-3">
-                        {entry.summary}
-                      </p>
-
-                      <div className="flex flex-wrap gap-1.5 mt-auto pt-2 border-t border-border">
-                        {entry.tech.map((t) => (
-                          <Badge key={t} label={t} />
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Right: bullets + achievements */}
-                    <div className="lg:col-span-5 p-6 flex flex-col gap-5">
-                      <ul className="flex flex-col gap-2.5">
-                        {entry.bullets.map((bullet) => (
-                          <li key={bullet} className="flex gap-3 text-text-secondary text-sm leading-relaxed">
-                            <span className="text-emerald-accent mt-0.5 flex-shrink-0">▸</span>
-                            {bullet}
-                          </li>
-                        ))}
-                      </ul>
-
-                      {entry.achievements && entry.achievements.length > 0 && (
-                        <div className="bg-base border border-border rounded-xl p-4">
-                          <p className="font-mono text-emerald-accent text-xs tracking-widest uppercase mb-3">
-                            &gt;_ KEY ACHIEVEMENTS
-                          </p>
-                          <ul className="flex flex-col gap-2">
-                            {entry.achievements.map((a) => (
-                              <li key={a} className="text-text-secondary text-sm flex gap-2.5">
-                                <Icon icon="mdi:trophy-outline" className="w-4 h-4 text-blue-light flex-shrink-0 mt-0.5" />
-                                {a}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  <KeyTray className="mt-8 flex flex-wrap gap-2">
+                    {x.tech.map((t) => (
+                      <motion.span key={t} variants={dropKey} className="cap cap-alpha legend text-sm">
+                        <span>{t}</span>
+                      </motion.span>
+                    ))}
+                  </KeyTray>
                 </div>
-              </motion.div>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
+
+        <Reveal className="mt-6 grid gap-2 border-t border-line pt-14 lg:grid-cols-[16rem_1fr] lg:gap-14 lg:pl-12">
+          <p className="legend tabular-nums text-rose">{profile.education.period}</p>
+          <div>
+            <p className="text-2xl font-bold">{profile.education.degree}</p>
+            <p className="mt-1 text-muted">
+              {profile.education.school} · {profile.education.location}
+            </p>
+          </div>
+        </Reveal>
       </div>
     </section>
   )
