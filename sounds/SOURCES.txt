@@ -1,0 +1,5 @@
+key1.mp3 .. key4.mp3 are trimmed, mono, loudness-normalized versions of
+"Keyboard - Key 1.wav" .. "Keyboard - Key 4.wav" from Benjamin Burnes'
+"Keyboard Sounds (Mar 2021)" pack (abstractionmusic.com), released under
+Creative Commons 0 (public domain). Mirror used:
+https://github.com/Silentnoob21/cc0-public-domain-sounds/tree/main/bb%20-%20Keyboard%20Sounds%20(Mar%202021)
