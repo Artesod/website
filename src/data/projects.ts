@@ -12,12 +12,19 @@ export interface Project {
   image?: string
   /** Real screenshots, first is the hero shot. */
   shots?: { src: string; alt: string }[]
+  /** Looping screen recording, served as `${src}.mp4` (H.264) with a poster. Replaces the hero shot. */
+  video?: { src: string; poster: string; label: string }
   theme?: 'perfect-season'
 }
 
 export const projects: Project[] = [
   {
     id: 'rebel-budget',
+    video: {
+      src: '/videos/rebel-budget',
+      poster: '/videos/rebel-budget-poster.webp',
+      label: 'Rebel Budget screen recording: logging a $12.50 taco lunch and watching the weekly budget, XP, and recent log update (sample data)',
+    },
     shots: [
       { src: '/images/portfolio/rebel-budget/dashboard.webp', alt: 'Rebel Budget dashboard: the pet on its LCD, weekly budget left, level and recent log (sample data)' },
       { src: '/images/portfolio/rebel-budget/analytics.webp', alt: 'Rebel Budget weekly spending report and category breakdown (sample data)' },
@@ -39,6 +46,11 @@ export const projects: Project[] = [
   },
   {
     id: 'perfect-season',
+    video: {
+      src: '/videos/perfect-season',
+      poster: '/videos/perfect-season-poster.webp',
+      label: 'Perfect Season screen recording: starting an all-time run, rolling a franchise, and drafting players',
+    },
     shots: [
       { src: '/images/portfolio/perfect-season/draft.webp', alt: 'Perfect Season draft screen: round 1 player picks, cap sheet, and roster' },
       { src: '/images/portfolio/perfect-season/home.webp', alt: 'Perfect Season home screen with new-run settings and career badges' },
@@ -61,6 +73,11 @@ export const projects: Project[] = [
   },
   {
     id: 'percipia-website',
+    video: {
+      src: '/videos/percipia-website',
+      poster: '/videos/percipia-website-poster.webp',
+      label: 'Percipia website screen recording: scrolling the homepage product story',
+    },
     shots: [
       { src: '/images/portfolio/percipia_website/welcome.webp', alt: 'Percipia homepage hero: We are Percipia' },
       { src: '/images/portfolio/percipia_website/news.webp', alt: 'Percipia news page' },

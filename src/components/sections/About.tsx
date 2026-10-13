@@ -13,7 +13,7 @@ const ARTISANS = [
 
 export function About() {
   return (
-    <section id="about" className="bg-ground text-blush">
+    <section id="about" className="bg-panel text-blush">
       <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:items-end lg:gap-16">
           <Title className="text-[clamp(2.75rem,7vw,5.5rem)]">About</Title>
@@ -23,7 +23,7 @@ export function About() {
         </div>
 
         {/* The desk mat: the person, the current build, and what's off the clock. */}
-        <Reveal className="mt-14 rounded-[28px] border border-line bg-panel p-5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.9)] sm:p-10 lg:p-14">
+        <Reveal className="mt-14 rounded-[28px] border border-line bg-ground p-5 shadow-[0_24px_40px_-24px_rgb(0_0_0/0.9)] sm:p-10 lg:p-14">
           <div className="grid gap-10 lg:grid-cols-[minmax(0,22rem)_1fr] lg:gap-14">
             <motion.div
               className="self-start lg:mt-4"

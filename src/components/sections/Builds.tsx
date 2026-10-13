@@ -11,7 +11,7 @@ export function Builds() {
   const bench = builds.filter((b) => !b.featured)
 
   return (
-    <section id="builds" className="bg-panel text-blush">
+    <section id="builds" className="bg-ground text-blush">
       <div className="mx-auto max-w-page px-4 py-24 sm:px-8 sm:py-32">
         <header className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
@@ -33,7 +33,7 @@ export function Builds() {
         </header>
 
         {lead && (
-          <Reveal className="mt-16 grid gap-8 rounded-[28px] border border-line bg-ground p-5 sm:mt-20 sm:p-8 lg:grid-cols-[1.5fr_1fr] lg:gap-12 lg:p-10">
+          <Reveal className="mt-16 grid gap-8 rounded-[28px] border border-line bg-panel p-5 sm:mt-20 sm:p-8 lg:grid-cols-[1.5fr_1fr] lg:gap-12 lg:p-10">
             <SoundTest build={lead} hq />
             <div className="flex flex-col">
               <h3 className="display text-[clamp(2rem,3.6vw,3rem)]">{lead.name}</h3>
@@ -48,7 +48,7 @@ export function Builds() {
 
         <div className="mt-8 grid gap-8 md:grid-cols-3">
           {rest.map((b, i) => (
-            <Reveal key={b.videoId} delay={i * 0.08} className="flex flex-col rounded-[22px] border border-line bg-ground p-4 sm:p-5">
+            <Reveal key={b.videoId} delay={i * 0.08} className="flex flex-col rounded-[22px] border border-line bg-panel p-4 sm:p-5">
               <SoundTest build={b} />
               <h3 className="display mt-5 text-2xl">{b.name}</h3>
               <Specs build={b} compact />

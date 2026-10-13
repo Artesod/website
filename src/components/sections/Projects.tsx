@@ -1,5 +1,5 @@
-import type { CSSProperties } from 'react'
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Icon } from '@iconify/react'
 import { projects, type Project } from '../../data/projects'
 import { KeyTray, Parallax, Reveal, Title, dropKey } from '../ui/motion'
@@ -150,12 +150,16 @@ function Board({ project: p, colorway: cw, className = '' }: { project: Project;
             />
           )}
           <Parallax distance={24} className="relative">
-            <img
-              src={hero.src}
-              alt={hero.alt}
-              loading="lazy"
-              className="w-full rounded-xl border border-white/10 shadow-[0_24px_50px_-12px_rgb(0_0_0/0.9)]"
-            />
+            {p.video ? (
+              <LoopVideo {...p.video} />
+            ) : (
+              <img
+                src={hero.src}
+                alt={hero.alt}
+                loading="lazy"
+                className="w-full rounded-xl border border-white/10 shadow-[0_24px_50px_-12px_rgb(0_0_0/0.9)]"
+              />
+            )}
           </Parallax>
         </div>
       )}
@@ -186,5 +190,67 @@ function Board({ project: p, colorway: cw, className = '' }: { project: Project;
         </span>
       </figcaption>
     </figure>
+  )
+}
+
+/** A short screen recording on loop. Plays only while on screen; reduced motion starts paused. */
+function LoopVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const reduce = useReducedMotion()
+  const [paused, setPaused] = useState(Boolean(reduce))
+  const visible = useRef(false)
+
+  useEffect(() => {
+    const v = ref.current
+    if (!v) return
+    // React does not reliably reflect `muted`, and browsers only autoplay muted video.
+    v.muted = true
+    const io = new IntersectionObserver(
+      ([e]) => {
+        visible.current = e.isIntersecting
+        if (e.isIntersecting && !paused) void v.play().catch(() => {})
+        else v.pause()
+      },
+      { threshold: 0.25 },
+    )
+    io.observe(v)
+    return () => io.disconnect()
+  }, [paused])
+
+  return (
+    <div className="relative">
+      <video
+        ref={ref}
+        muted
+        loop
+        playsInline
+        preload="none"
+        poster={poster}
+        width={1280}
+        height={800}
+        aria-label={label}
+        className="block aspect-[16/10] h-auto w-full rounded-xl border border-white/10 bg-well object-cover shadow-[0_24px_50px_-12px_rgb(0_0_0/0.9)]"
+      >
+        <source src={`${src}.mp4`} type="video/mp4" />
+      </video>
+      <button
+        type="button"
+        onClick={() => {
+          const v = ref.current
+          if (!v) return
+          const next = !paused
+          setPaused(next)
+          if (next) v.pause()
+          else if (visible.current) void v.play().catch(() => {})
+        }}
+        aria-label={paused ? 'Play recording' : 'Pause recording'}
+        className="cap cap-alpha legend absolute right-3 top-3 text-xs"
+      >
+        <span className="inline-flex items-center gap-1">
+          <Icon icon={paused ? 'mdi:play' : 'mdi:pause'} className="h-4 w-4" aria-hidden />
+          {paused ? 'Play' : 'Pause'}
+        </span>
+      </button>
+    </div>
   )
 }

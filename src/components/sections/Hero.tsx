@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Icon } from '@iconify/react'
 import { profile } from '../../data/profile'
-import { searchTech } from '../../data/techIndex'
+import { searchTech, techIndex } from '../../data/techIndex'
 import { loadThock, setSoundOn, thock, thockIfOn } from '../../lib/thock'
 import { motion } from 'framer-motion'
 import { SETTLE } from '../ui/motion'
+import { Macropad } from '../ui/Macropad'
+import { useMediaQuery } from '../../hooks/useMediaQuery'
 
 type Tone = 'alpha' | 'mod' | 'rose' | 'cream'
 
@@ -77,6 +79,12 @@ const ROWS: KeyDef[][] = [
 const QUICK_PICKS = ['React', 'Go', 'TypeScript', 'PostgreSQL', 'Docker', 'Python']
 const DEMO_WORD = 'react'
 
+// What the macropad knob cycles through: everything with shipped work, most-used first.
+const KNOB_STACK = [...techIndex.values()]
+  .filter((t) => t.uses.length > 0)
+  .sort((a, b) => b.uses.length - a.uses.length || a.name.localeCompare(b.name))
+  .map((t) => t.name)
+
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
@@ -95,6 +103,10 @@ export function Hero() {
   const inputRef = useRef<HTMLInputElement>(null)
   const soundRef = useRef(sound)
   soundRef.current = sound
+  // Phones get the macropad: the 65% board would scroll half its keys out of view.
+  const compact = useMediaQuery('(max-width: 799px)')
+  const compactRef = useRef(compact)
+  compactRef.current = compact
 
   const matches = useMemo(() => searchTech(query), [query])
 
@@ -168,6 +180,11 @@ export function Hero() {
         setQuery(DEMO_WORD)
         return
       }
+      if (compactRef.current) {
+        tap('pad-react')
+        setQuery(DEMO_WORD)
+        return
+      }
       DEMO_WORD.split('').forEach((ch, i) => {
         timers.push(
           window.setTimeout(() => {
@@ -184,18 +201,32 @@ export function Hero() {
     }
   }, [tap])
 
+  function toggleSound() {
+    setSound((s) => {
+      setSoundOn(!s)
+      if (!s) void loadThock().then(() => thock())
+      return !s
+    })
+  }
+
+  function turnKnob(dir: 1 | -1) {
+    touched.current = true
+    if (soundRef.current) thock()
+    setQuery((q) => {
+      const i = KNOB_STACK.findIndex((t) => t.toLowerCase() === q.trim().toLowerCase())
+      const next =
+        i === -1 ? (dir === 1 ? 0 : KNOB_STACK.length - 1) : (i + dir + KNOB_STACK.length) % KNOB_STACK.length
+      return KNOB_STACK[next].toLowerCase()
+    })
+  }
+
   function onKeyClick(k: KeyDef) {
     touched.current = true
     tap(k.code, k.wide)
     if (k.go) return scrollToId(k.go)
     switch (k.action) {
       case 'sound':
-        setSound((s) => {
-          setSoundOn(!s)
-          if (!s) void loadThock().then(() => thock())
-          return !s
-        })
-        return
+        return toggleSound()
       case 'clear':
         return setQuery('')
       case 'back':
@@ -203,7 +234,8 @@ export function Hero() {
       case 'space':
         return setQuery((q) => (q + ' ').slice(0, 24))
     }
-    if (k.code.startsWith('Key') || k.code.startsWith('Digit')) setQuery((q) => (q + k.label.toLowerCase()).slice(0, 24))
+    if (k.code.startsWith('Key') || k.code.startsWith('Digit'))
+      setQuery((q) => (q + k.label.toLowerCase()).slice(0, 24))
   }
 
   return (
@@ -220,7 +252,8 @@ export function Hero() {
               </h1>
             </div>
             <p className="mt-6 max-w-[34ch] text-lg sm:text-xl leading-snug text-blush/85">
-              Full stack engineer. React on the front, Go on the back, five years shipping software for hotels and resorts.
+              Full stack engineer. React on the front, Go on the back, five years shipping software for hotels and
+              resorts.
             </p>
             {profile.available && (
               <p className="mt-5 inline-flex items-center gap-2 text-sm text-rose">
@@ -271,51 +304,84 @@ export function Hero() {
                 </button>
               )}
             </div>
-            <div className="mt-3 flex flex-wrap gap-2" aria-label="Quick picks">
-              {QUICK_PICKS.map((t) => (
+            {compact ? (
+              <div className="mt-6">
+                <Macropad
+                  query={query}
+                  down={down}
+                  sound={sound}
+                  tap={(code, wide) => {
+                    touched.current = true
+                    tap(code, wide)
+                  }}
+                  onTech={(q) => setQuery(q)}
+                  onGo={scrollToId}
+                  onClear={() => setQuery('')}
+                  onSound={toggleSound}
+                  onKnob={turnKnob}
+                />
+              </div>
+            ) : (
+              <>
+                <div className="mt-3 flex flex-wrap gap-2" aria-label="Quick picks">
+                  {QUICK_PICKS.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => {
+                        touched.current = true
+                        setQuery(t.toLowerCase())
+                      }}
+                      className="cap cap-alpha legend text-sm"
+                    >
+                      <span>{t}</span>
+                    </button>
+                  ))}
+                </div>
                 <button
-                  key={t}
                   type="button"
+                  aria-pressed={sound}
                   onClick={() => {
                     touched.current = true
-                    setQuery(t.toLowerCase())
+                    const next = !sound
+                    setSound(next)
+                    setSoundOn(next)
+                    if (next) void loadThock().then(() => thock())
                   }}
-                  className="cap cap-alpha legend text-sm"
+                  className="mt-4 inline-flex items-center gap-2 text-sm text-muted hover:text-blush"
                 >
-                  <span>{t}</span>
+                  <Icon icon={sound ? 'mdi:volume-high' : 'mdi:volume-off'} className="h-4 w-4 text-rose" aria-hidden />
+                  {sound ? 'Switch sounds on' : 'Turn on switch sounds'}
                 </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              aria-pressed={sound}
-              onClick={() => {
-                touched.current = true
-                const next = !sound
-                setSound(next)
-                setSoundOn(next)
-                if (next) void loadThock().then(() => thock())
-              }}
-              className="mt-4 inline-flex items-center gap-2 text-sm text-muted hover:text-blush"
-            >
-              <Icon icon={sound ? 'mdi:volume-high' : 'mdi:volume-off'} className="h-4 w-4 text-rose" aria-hidden />
-              {sound ? 'Switch sounds on' : 'Turn on switch sounds'}
-            </button>
-            <Readout query={query} matches={matches} />
+              </>
+            )}
+            <Readout query={query} matches={matches} compact={compact} />
           </form>
         </div>
 
-        <Keyboard down={down} sound={sound} onKey={onKeyClick} />
+        {!compact && <Keyboard down={down} sound={sound} onKey={onKeyClick} />}
       </div>
     </section>
   )
 }
 
-function Readout({ query, matches }: { query: string; matches: ReturnType<typeof searchTech> }) {
+function Readout({
+  query,
+  matches,
+  compact,
+}: {
+  query: string
+  matches: ReturnType<typeof searchTech>
+  compact: boolean
+}) {
   return (
     <div aria-live="polite" className="mt-5 min-h-[7.5rem] text-[0.95rem]">
       {!query.trim() ? (
-        <p className="text-muted">Or just mash keys. The board below listens to your real keyboard.</p>
+        <p className="text-muted">
+          {compact
+            ? 'Or tap a key on the pad. The knob cycles through everything I have shipped with.'
+            : 'Or just mash keys. The board below listens to your real keyboard.'}
+        </p>
       ) : matches.length === 0 ? (
         <p className="text-muted">
           Nothing shipped with “<span className="text-blush">{query.trim()}</span>” yet. Try Go or TypeScript.

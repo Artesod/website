@@ -17,8 +17,8 @@ export default function App() {
         <Projects />
         <Experience />
         <Skills />
-        <Builds />
         <About />
+        <Builds />
         <Contact />
       </main>
     </MotionConfig>

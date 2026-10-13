@@ -7,8 +7,8 @@ const NAV_LINKS = [
   { label: 'Projects', id: 'projects' },
   { label: 'Work', id: 'work' },
   { label: 'Kit', id: 'kit' },
-  { label: 'Builds', id: 'builds' },
   { label: 'About', id: 'about' },
+  { label: 'Builds', id: 'builds' },
   { label: 'Contact', id: 'contact' },
 ]
 
